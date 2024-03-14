@@ -1,7 +1,7 @@
 {
   "name": "fitness",
   "version": "1.0.0",
-  "description": "",
+  "description": "![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)\r ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)\r ![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)\r ![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)\r ![Sqlite](https://img.shields.io/badge/Sqlite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,5 +19,6 @@
     "prisma": "^5.11.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.2"
-  }
+  },
+  "keywords": []
 }

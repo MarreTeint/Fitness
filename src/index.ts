@@ -5,6 +5,7 @@ const prisma = new PrismaClient()
 const app = express();
 const port = 3000;
 
+app.use(express.json());
 app.get('/', (req, res) => {
     res.send('Hello, world!');
 });
@@ -14,6 +15,11 @@ app.listen(port, () => {
 });
 
 // USERS
+
+app.get('/api/users', async (req, res) => {
+    const users = await prisma.user.findMany();
+    res.json(users);
+});
 
 app.get('/api/users/:id', async (req, res) => {
     const user = await prisma.user.findUnique({

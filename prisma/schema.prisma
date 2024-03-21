@@ -10,18 +10,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model MuscularGroup{
-  id Int @id @default(autoincrement())
-  name String
-  exercises Exercise[]
-  bodyPartId Int
-  bodyPart BodyPart @relation(fields: [bodyPartId], references: [id])
-}
-
 model BodyPart{
   id Int @id @default(autoincrement())
   name String
-  muscularGroups MuscularGroup[]
+  exercises Exercise[]
+  MuscularGroupId Int
+  MuscularGroup MuscularGroup @relation(fields: [MuscularGroupId], references: [id])
+}
+
+model MuscularGroup{
+  id Int @id @default(autoincrement())
+  name String
+  bodyParts BodyPart[]
 }
 
 model Set{
@@ -36,8 +36,8 @@ model Exercise{
   id Int @id @default(autoincrement())
   name String
   description String
-  muscularGroupId Int
-  muscularGroup MuscularGroup @relation(fields: [muscularGroupId], references: [id])
+  bodyPartId Int
+  bodyPart BodyPart @relation(fields: [bodyPartId], references: [id])
   sets Set[]
   seances Seance[]
 }

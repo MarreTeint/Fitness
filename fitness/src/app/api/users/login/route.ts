@@ -21,13 +21,13 @@ export async function POST (request: NextRequest){
     })
 
     if(!user){
-        return NextResponse.json({ error: 'User unkno' },{status: 400});
+        return NextResponse.json({ error: 'User unknow' },{status: 400});
     }
 
     //check if password is correct
     if(user.password === password){
         //return user username
-        return NextResponse.json({ username: user.username });
+        return NextResponse.json({ username: user.username , id : user.id , email :user.email},{status: 200});
     }
     return NextResponse.json({ error: 'Email or password is incorrect' },{status: 400});
 }

@@ -1,0 +1,4 @@
+.navbar {
+    position: relative; /* or absolute, fixed, or sticky */
+    z-index: 10000; /* any value higher than the z-index of your content */
+  }

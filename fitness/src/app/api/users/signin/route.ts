@@ -32,7 +32,7 @@ export async function POST (request: NextRequest){
     })
 
     if(usernameTest){
-        return NextResponse.json({ error: 'Username already exists' },{status: 400});
+        return NextResponse.json({ error: 'Username already exists',code:'401' },{status: 400});
     }
 
     const user = await prisma.user.create({
@@ -42,5 +42,9 @@ export async function POST (request: NextRequest){
             username
         }
     })
-    return NextResponse.json(user)
+    return NextResponse.json({username:
+        user.username,
+        email: user.email,
+        id: user.id
+    }, { status: 201 });
 }

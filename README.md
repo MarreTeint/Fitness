@@ -9,4 +9,19 @@
 # Fitness
 
 ## Description
+
 A small backend to follow your fitness journey
+
+## Installation process for developement 
+
+## Script project 
+
+### db-migrate 
+
+### db-seed
+
+### db-studio
+
+### db-reset
+
+## Deployement process

@@ -1,4 +1,4 @@
-import User from '@/app/class/user';
+import User from '@/class/user';
 import { createContext, Dispatch } from 'react';
 
 //create a context for the user and user dispatch

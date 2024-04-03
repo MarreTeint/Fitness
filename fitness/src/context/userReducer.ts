@@ -1,5 +1,5 @@
 import { useReducer } from 'react';
-import User from '@/app/class/user';
+import User from '@/class/user';
 
 //define user dispatch actions
 export const SET_USER = 'SET_USER';

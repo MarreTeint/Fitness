@@ -8,7 +8,7 @@ import { userContext
  import { userDispatchContext } from '@/context/userContext';
  import { userReducer } from '@/context/userReducer';
 import Navbar from "@/components/navbar";
-import User from './class/user';
+import User from '../class/user';
 
 
 const inter = Inter({ subsets: ["latin"] });

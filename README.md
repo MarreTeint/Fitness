@@ -12,16 +12,22 @@
 
 A small backend to follow your fitness journey
 
-## Installation process for developement 
+## Installation process for developement
 
-## Script project 
+## Script project
 
-### db-migrate 
-
+### db-migrate
+    migrate the database to the latest version
 ### db-seed
+    seed the database with data
 
 ### db-studio
+    open the database studio
 
 ### db-reset
+    reset the database
+
+### db-init
+    init the database
 
 ## Deployement process

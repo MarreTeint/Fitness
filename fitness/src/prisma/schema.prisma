@@ -15,12 +15,17 @@ model MuscularGroup {
   name       String
   bodyPartId Int
   bodyPart   BodyPart   @relation(fields: [bodyPartId], references: [id])
+   firstExercises    Exercice[]           @relation("FirstMuscularGroup")
+  secondExercises   Exercice[]           @relation("SecondMuscularGroup")
+  thirdExercises    Exercice[]           @relation("ThirdMuscularGroup")
 }
 
 model BodyPart {
   id             Int             @id @default(autoincrement())
   name           String
   muscularGroups MuscularGroup[]
+  exercises      Exercice[]
+
 }
 
 model Set {
@@ -30,11 +35,18 @@ model Set {
   exerciseId Int
 }
 
-model Exercise {
-  id              Int           @id @default(autoincrement())
-  description     String
-  muscularGroupId Int
-  bodyPartId      Int
+model Exercice {
+  id                    Int                  @id @default(autoincrement())
+  name                  String
+  description           String
+  firstMuscularGroupId  Int
+  firstMuscularGroup    MuscularGroup @relation("FirstMuscularGroup", fields: [firstMuscularGroupId], references: [id])
+  secondMuscularGroupId Int?
+  secondMuscularGroup   MuscularGroup? @relation("SecondMuscularGroup", fields: [secondMuscularGroupId], references: [id])
+  thirdMuscularGroupId  Int?
+  thirdMuscularGroup    MuscularGroup? @relation("ThirdMuscularGroup", fields: [thirdMuscularGroupId], references: [id])
+  bodyPartId            Int
+  bodyPart              BodyPart @relation(fields: [bodyPartId], references: [id])
 }
 
 model Seance {

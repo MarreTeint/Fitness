@@ -10,7 +10,9 @@
     "db-migrate": "cd src/ && prisma migrate dev",
     "db-reset": "cd src/ && prisma migrate reset",
     "db-studio": "cd src/ && prisma studio",
-    "db-seed": "tsx src/prisma/seed.ts"
+    "db-seed": "tsx src/prisma/seed.ts",
+    "db-init": "cd src/ && prisma generate && prisma migrate reset && prisma migrate dev && pnpm tsx src/prisma/seed.ts"
+    
   },
   "dependencies": {
     "@prisma/client": "5.11.0",

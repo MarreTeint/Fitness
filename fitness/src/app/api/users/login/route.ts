@@ -1,8 +1,7 @@
 import {NextRequest, NextResponse} from "next/server";
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+import { logUser,LogUserError } from "@/prisma/userManager";
 
-//add user with email and password and username
+//log user with email and password
 export async function POST (request: NextRequest){
     if (!request.body) {
         return NextResponse.json({ error: 'Request body is empty' },{status: 400});
@@ -10,26 +9,16 @@ export async function POST (request: NextRequest){
     const body = await request.json();
     const { email, password} = body;
 
-    if (!email || !password) {
-        return NextResponse.json({ error: 'Email and password are required' },{status: 400});
-    }
-    //check if user exists in the database
-    const user = await prisma.user.findFirst({
-        where: {
-            email: email
+    try {
+        const user = await logUser(email, password);
+        return NextResponse.json(user, {status: 200});
+    } catch (error) {
+        if (error instanceof LogUserError) {
+            return NextResponse.json({ error: error.message }, {status: 400});            
         }
-    })
-
-    if(!user){
-        return NextResponse.json({ error: 'User unknow' },{status: 400});
+        return NextResponse.json({error}, {status: 400});
     }
 
-    //check if password is correct
-    if(user.password === password){
-        //return user username
-        return NextResponse.json({ username: user.username , id : user.id , email :user.email},{status: 200});
-    }
-    return NextResponse.json({ error: 'Email or password is incorrect' },{status: 400});
 }
 
     

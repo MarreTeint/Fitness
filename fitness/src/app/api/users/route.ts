@@ -1,56 +1,78 @@
 import {NextRequest, NextResponse} from "next/server";
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+import { deleteUser,getUser,getUsers,updateUser ,UserError} from "@/prisma/userManager";
+
 
 
 export async function GET (request: NextRequest){
     console.log(request.url)
     const url = new URL(request.url, 'http://localhost'); // Add a base URL for relative URLs
-    const id = url.searchParams.get('id');
-    console.log("id:", id)
-    if (id) {
-        const user = await prisma.user.findUnique({
-            where: {
-                id: Number(id)
+    const id = Number(url.searchParams.get('id'));
+
+    if (!id) {
+        try {
+            const users = await getUsers();
+            return NextResponse.json(users, {status: 200});
+        } catch (error) {
+            if (error instanceof UserError) {
+                return NextResponse.json({ error: error.message }, {status: 400});            
             }
-        })
-        if (user) {
-            return NextResponse.json(user)
-        } else {
-            return NextResponse.json({ error: 'User does not exist' },{status: 400});
+            return NextResponse.json({error}, {status: 400});
+
         }
-    } else {
-        const users = await prisma.user.findMany()
-        return NextResponse.json(users)
+    }else{
+        try {
+            const user = await getUser(id);
+            return NextResponse.json(user, {status: 200});
+        } catch (error) {
+            if (error instanceof UserError) {
+                return NextResponse.json({ error: error.message }, {status: 400});            
+            }
+            return NextResponse.json({error}, {status: 400});
+        }
+    }
+
+}
+
+
+export async function DELETE (request: NextRequest){
+    const url = new URL(request.url, 'http://localhost'); // Add a base URL for relative URLs
+    const id = Number(url.searchParams.get('id')) ;
+    //const id = Number(id);
+
+    if (!id) {
+        return NextResponse.json({ error: 'ID is required' },{status: 400});
+    }
+
+    try {
+        const user = await deleteUser(id);
+        return NextResponse.json(user, {status: 200});
+    } catch (error) {
+        if (error instanceof UserError) {
+            return NextResponse.json({ error: error.message }, {status: 400});            
+        }
+        return NextResponse.json({error}, {status: 400});
     }
 }
 
-//delete user with id
-export async function DELETE (request: NextRequest){
+export async function PUT (request: NextRequest){
     const url = new URL(request.url, 'http://localhost'); // Add a base URL for relative URLs
-    const id = url.searchParams.get('id');
+    const id = Number(url.searchParams.get('id'));
+    const email = url.searchParams.get('email');
+    const password = url.searchParams.get('password');
+    const username = url.searchParams.get('username');
 
-     //check if user exists in the database
-     const user = await prisma.user.findUnique({
-        where: {
-            id: Number(id)
-        }
-    })
-
-    if(!user){
-        return NextResponse.json({ error: 'User does not exist' },{status: 400});
+    if (!id || !email || !password || !username) {
+        return NextResponse.json({ error: 'ID, email, password, and username are required' },{status: 400});
     }
 
-
-    if (id) {
-        const user = await prisma.user.delete({
-            where: {
-                id: Number(id)
-            }
-        })
-        return NextResponse.json(user)
-    } else {
-        return NextResponse.json({ error: 'User id is required' },{status: 400});
+    try {
+        const user = await updateUser(id, email, password, username);
+        return NextResponse.json(user, {status: 200});
+    } catch (error) {
+        if (error instanceof UserError) {
+            return NextResponse.json({ error: error.message }, {status: 400});            
+        }
+        return NextResponse.json({error}, {status: 400});
     }
 }
 

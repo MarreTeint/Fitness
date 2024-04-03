@@ -6,16 +6,24 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db-migrate": "cd src/ && prisma migrate dev",
+    "db-reset": "cd src/ && prisma migrate reset",
+    "db-studio": "cd src/ && prisma studio",
+    "db-seed": "tsx src/prisma/seed.ts",
+    "db-init": "cd src/ && prisma generate && prisma migrate reset && prisma migrate dev && pnpm tsx src/prisma/seed.ts"
+    
   },
   "dependencies": {
     "@prisma/client": "5.11.0",
+    "dotenv": "^16.4.5",
     "next": "14.1.3",
     "prisma": "^5.11.0",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.0.1",
-    "sass": "^1.72.0"
+    "sass": "^1.72.0",
+    "tsx": "^4.7.1"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -26,6 +34,6 @@
     "eslint-config-next": "14.1.3",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
-    "typescript": "^5"
+    "typescript": "^5.4.3"
   }
 }

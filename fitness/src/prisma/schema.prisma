@@ -10,50 +10,55 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model MuscularGroup{
-  id Int @id @default(autoincrement())
-  name String
-  exercises Exercise[]
+model MuscularGroup {
+  id         Int        @id @default(autoincrement())
+  name       String
   bodyPartId Int
-  bodyPart BodyPart @relation(fields: [bodyPartId], references: [id])
+  bodyPart   BodyPart   @relation(fields: [bodyPartId], references: [id])
+   firstExercises    Exercice[]           @relation("FirstMuscularGroup")
+  secondExercises   Exercice[]           @relation("SecondMuscularGroup")
+  thirdExercises    Exercice[]           @relation("ThirdMuscularGroup")
 }
 
-model BodyPart{
-  id Int @id @default(autoincrement())
-  name String
+model BodyPart {
+  id             Int             @id @default(autoincrement())
+  name           String
   muscularGroups MuscularGroup[]
+  exercises      Exercice[]
+
 }
 
-model Set{
-  id Int @id @default(autoincrement())
-  reps Int
-  weight Float
+model Set {
+  id         Int   @id @default(autoincrement())
+  reps       Int
+  weight     Float
   exerciseId Int
-  exercise Exercise @relation(fields: [exerciseId], references: [id])
 }
 
-model Exercise{
-  id Int @id @default(autoincrement())
-  name String
-  description String
-  muscularGroupId Int
-  muscularGroup MuscularGroup @relation(fields: [muscularGroupId], references: [id])
-  sets Set[]
-  seances Seance[]
+model Exercice {
+  id                    Int                  @id @default(autoincrement())
+  name                  String
+  description           String
+  firstMuscularGroupId  Int
+  firstMuscularGroup    MuscularGroup @relation("FirstMuscularGroup", fields: [firstMuscularGroupId], references: [id])
+  secondMuscularGroupId Int?
+  secondMuscularGroup   MuscularGroup? @relation("SecondMuscularGroup", fields: [secondMuscularGroupId], references: [id])
+  thirdMuscularGroupId  Int?
+  thirdMuscularGroup    MuscularGroup? @relation("ThirdMuscularGroup", fields: [thirdMuscularGroupId], references: [id])
+  bodyPartId            Int
+  bodyPart              BodyPart @relation(fields: [bodyPartId], references: [id])
 }
 
-model Seance{
-  id Int @id @default(autoincrement())
-  date DateTime
-  exercises Exercise[]
+model Seance {
+  id     Int  @id @default(autoincrement())
   userId Int
-  user User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
 }
 
-model User{
-  id Int @id @default(autoincrement())
-  username String @unique
-  email String @unique
+model User {
+  id       Int      @id @default(autoincrement())
+  username String   @unique
+  email    String   @unique
   password String
-  seances Seance[]
+  seances  Seance[]
 }

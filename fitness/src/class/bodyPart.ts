@@ -1,4 +1,4 @@
-export const enum BodyPart {
+export enum BodyPart {
     Chest = 0,
     Back = 1,
     Shoulders = 2,

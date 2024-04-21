@@ -29,8 +29,8 @@ export const MuscularGroups:muscularGroup[]=[
     new muscularGroup(13,"latissimus dorsi",BodyPart.Back),
     new muscularGroup(14,"trapzius",BodyPart.Back),
     new muscularGroup(15,"rhomboids",BodyPart.Back),
-    new muscularGroup(17,"obliques",BodyPart.Core),
-    new muscularGroup(18,"transverse abdominis",BodyPart.Core),
-    new muscularGroup(19,"rectus abdominis",BodyPart.Core),
-    new muscularGroup(20,"heart",BodyPart.Cardio)
+    new muscularGroup(16,"obliques",BodyPart.Core),
+    new muscularGroup(17,"transverse abdominis",BodyPart.Core),
+    new muscularGroup(18,"rectus abdominis",BodyPart.Core),
+    new muscularGroup(29,"heart",BodyPart.Cardio)
 ]

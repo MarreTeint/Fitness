@@ -28,11 +28,21 @@ model BodyPart {
 
 }
 
-model Set {
-  id         Int   @id @default(autoincrement())
+model Rep{
+  id Int @id @default(autoincrement())
   reps       Int
   weight     Float
+  setId      Int
+  set        Set @relation(fields: [setId], references: [id])
+
+}
+
+model Set {
+  id         Int   @id @default(autoincrement())
+  reps       Rep[]
   exerciseId Int
+  seanceId   Int  
+  seance     Seance @relation(fields: [seanceId], references: [id])
 }
 
 model Exercice {
@@ -53,6 +63,8 @@ model Seance {
   id     Int  @id @default(autoincrement())
   userId Int
   user   User @relation(fields: [userId], references: [id])
+  date   DateTime
+  sets   Set[]
 }
 
 model User {

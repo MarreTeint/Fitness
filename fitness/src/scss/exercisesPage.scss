@@ -1,0 +1,60 @@
+.exercices-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 50px auto;
+}
+.exercice-preview {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 75vw;
+    height: 10vh;
+    border: 2px solid #ffffff;
+    margin-bottom: 15px;
+    padding: 5px;
+    border-radius: 10px;
+    cursor:pointer;
+}
+.exercice-preview:hover{
+    background-color: #ffffff;
+    color: #000000;
+    border: 4px double #000000;
+}
+.exercice-preview:hover h2{
+    color: #000000;
+}
+.exercice-preview:hover p{
+    color: #000000;
+}
+.exercice-preview:hover h3{
+    color: #000000;
+}
+.exercice-preview h2{
+    font-size: 1.5rem;
+    color: #ffffff;
+}
+
+
+.exercice-preview p{
+    font-size: 1rem;
+    color: #ffffff;
+}
+.exercice-preview h3{
+    font-size: 1rem;
+    color: #ffffff;
+}
+
+.exercice-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px auto;
+}
+.exercice-page h1{
+    color: #ffffff;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    justify-content: center;
+}

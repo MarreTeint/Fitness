@@ -57,7 +57,7 @@ const Signin: React.FC = () => {
             console.log(data);
 
             //save the token in the local storage
-            if (statut === 201) {
+            if (statut === 200) {
                 //save username , email and id in the local storage
                 localStorage.setItem("username", data.username);
                 localStorage.setItem("email", data.email);
@@ -137,6 +137,16 @@ const Signin: React.FC = () => {
             Sign In
           </button>
         </form>
+        <div className="mt-4">
+          <p>{"Already have an account?"}</p>
+          <button
+            className="text-blue-500 underline"
+            onClick={() => router.push("/auth/login")}
+          >
+            Login
+          </button>
+          </div>
+        
       </div>
     </main>
   );

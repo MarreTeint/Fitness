@@ -11,7 +11,7 @@
     "db-reset": "cd src/ && prisma migrate reset",
     "db-studio": "cd src/ && prisma studio",
     "db-seed": "tsx src/prisma/seed.ts",
-    "db-init": "cd src/ && prisma generate && prisma migrate reset && prisma migrate dev && pnpm tsx src/prisma/seed.ts"
+    "db-init": "cd src/ && prisma generate && prisma migrate reset --force  && prisma migrate dev && pnpm tsx src/prisma/seed.ts"
     
   },
   "dependencies": {

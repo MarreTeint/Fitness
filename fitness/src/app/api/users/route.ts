@@ -5,7 +5,7 @@ import { updateUserUseCase, deleteUserUseCase, getUsersUseCase } from "@/usecase
 
 
 export async function GET (request: NextRequest){
-    getUsersUseCase(request);
+    return await getUsersUseCase(request);
 }
 
 

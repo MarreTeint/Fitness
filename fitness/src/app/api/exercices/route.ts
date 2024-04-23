@@ -8,5 +8,5 @@ import { getAllExercicesUseCase } from "@/usecase/ExerciceUseCase";
 
 //get all the exercices
 export async function GET (request: NextRequest){
-    getAllExercicesUseCase(); 
+    return await getAllExercicesUseCase(); 
 }

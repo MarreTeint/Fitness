@@ -9,7 +9,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  getExerciceUseCase(request, { params });
+return await getExerciceUseCase(request, { params });
  
 }
 
@@ -17,7 +17,7 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  deleteExerciceUseCase(request, { params });
+  return await deleteExerciceUseCase(request, { params });
  
 }
 
@@ -25,5 +25,5 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string }}
 ) {
-  updateExerciceUseCase(request, { params })
+  return await updateExerciceUseCase(request, { params })
 }

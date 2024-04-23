@@ -5,13 +5,17 @@ import User from '@/class/user';
 export const SET_USER = 'SET_USER';
 export const CLEAR_USER = 'CLEAR_USER';  
 
-export const userReducer = (state: User, action: {type: string, payload?: User}) => {
+const initialState: User = new User(-1, '', '');
+
+export const userReducer = (state: User, action: { type: string; payload?: User }): User => {
     switch(action.type) {
         case SET_USER:
-            return action.payload;
+            return action.payload ?? new User(-1, '', '');
         case CLEAR_USER:
             return new User(-1, '', '');
         default:
             return state;
     }
 }
+
+

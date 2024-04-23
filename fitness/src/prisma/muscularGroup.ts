@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { MuscularGroups } from "@/class/muscularGroup";
+import { muscularGroups } from "@/class/muscularGroup";
 import 'dotenv/config';
 
 export async function seedMuscularGroup() {
@@ -11,12 +11,12 @@ export async function seedMuscularGroup() {
     await prisma.muscularGroup.deleteMany();
 
     // Then, we recreate them
-    for (let index = 0; index < MuscularGroups.length; index++) {
+    for (let index = 0; index < muscularGroups.length; index++) {
         const createMuscularGroup = await prisma.muscularGroup.create({
             data: {
                 id: index,
-                name: MuscularGroups[index].name,
-                bodyPartId : MuscularGroups[index].bodyPart.valueOf()
+                name: muscularGroups[index].name,
+                bodyPartId : muscularGroups[index].bodyPart.valueOf()
                 
             }
         })

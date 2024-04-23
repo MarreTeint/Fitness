@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getExercice, deleteExercice,updateExercice } from "@/prisma/exerciceManager";
+import { BodyPart } from "@/class/bodyPart";
+import { muscularGroups } from "@/class/muscularGroup";
+import { Exercice } from "@/class/exercice";
 
 export async function GET(
   request: NextRequest,
@@ -7,7 +10,11 @@ export async function GET(
 ) {
   try {
     const exercice = await getExercice(parseInt(params.id));
-    return NextResponse.json(exercice, { status: 200 });
+    let firstMuscularGroup =muscularGroups[exercice.firstMuscularGroupId] 
+    let secondMuscularGroup = exercice.secondMuscularGroupId !== null ? muscularGroups[exercice.secondMuscularGroupId] : undefined;
+    let thirdMuscularGroup = exercice.thirdMuscularGroupId !== null ? muscularGroups[exercice.thirdMuscularGroupId] : undefined;
+    const bodyPart: BodyPart = BodyPart[exercice.bodyPartId] as unknown as BodyPart;
+    return NextResponse.json(new Exercice(exercice.id,exercice.name,exercice.description,firstMuscularGroup,secondMuscularGroup,thirdMuscularGroup,bodyPart), { status: 200 });
   } catch (error) {
     return NextResponse.json({ error }, { status: 400 });
   }

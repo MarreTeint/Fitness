@@ -55,9 +55,6 @@
                     "properties": {
                       "message": {
                         "type": "string"
-                      },
-                      "status": {
-                        "type": "integer"
                       }
                     }
                   }
@@ -73,9 +70,6 @@
                     "properties": {
                       "error": {
                         "type": "string"
-                      },
-                      "status": {
-                        "type": "integer"
                       }
                     }
                   }
@@ -107,7 +101,58 @@
                   "schema": {
                     "type": "object",
                     "properties": {
-                      "message": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "firstMuscularGroup": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "bodyPart": {
+                            "type": "integer"
+                          }
+                        }
+                      },
+                      "secondMuscularGroup": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "bodyPart": {
+                            "type": "integer"
+                          }
+                        }
+                      },
+                      "thirdMuscularGroup": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "bodyPart": {
+                            "type": "integer"
+                          }
+                        }
+                      },
+                      "bodyPart": {
                         "type": "string"
                       }
                     }
@@ -191,9 +236,6 @@
                     "properties": {
                       "message": {
                         "type": "string"
-                      },
-                      "status": {
-                        "type": "integer"
                       }
                     }
                   }
@@ -209,9 +251,6 @@
                     "properties": {
                       "error": {
                         "type": "string"
-                      },
-                      "status": {
-                        "type": "integer"
                       }
                     }
                   }
@@ -243,9 +282,6 @@
                     "properties": {
                       "message": {
                         "type": "string"
-                      },
-                      "status": {
-                        "type": "integer"
                       }
                     }
                   }
@@ -260,10 +296,12 @@
                     "type": "object",
                     "properties": {
                       "error": {
-                        "type": "string"
-                      },
-                      "status": {
-                        "type": "integer"
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          }
+                        }
                       }
                     }
                   }
@@ -284,7 +322,60 @@
                   "schema": {
                     "type": "array",
                     "items": {
-                      "type": "object"
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "firstMuscularGroup": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "bodyPart": {
+                              "type": "integer"
+                            }
+                          }
+                        },
+                        "secondMuscularGroup": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "bodyPart": {
+                              "type": "integer"
+                            }
+                          }
+                        },
+                        "thirsMuscularGroup": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "bodyPart": {
+                              "type": "integer"
+                            }
+                          }
+                        },
+                        "bodyPart": {
+                          "type": "string"
+                        }
+                      }
                     }
                   }
                 }
@@ -320,16 +411,13 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "type": "array",
-                    "items": {
-                      "type": "object"
-                    }
+                    "type": "integer"
                   }
                 }
               }
             },
             "400": {
-              "description": "Exercice not found",
+              "description": "Error",
               "content": {
                 "application/json": {
                   "schema": {
@@ -337,9 +425,6 @@
                     "properties": {
                       "error": {
                         "type": "string"
-                      },
-                      "status": {
-                        "type": "integer"
                       }
                     }
                   }
@@ -369,16 +454,65 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "type": "object"
+                    "type": "object",
+                    "properties": {
+                      "userID": {
+                        "type": "integer"
+                      },
+                      "date": {
+                        "type": "string"
+                      },
+                      "sets": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "reps": {
+                              "type": "integer"
+                            },
+                            "weight": {
+                              "type": "integer"
+                            },
+                            "exerciceID": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
             },
             "400": {
-              "description": "Internal Error"
+              "description": "Internal Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
             },
             "404": {
-              "description": "Seance not found"
+              "description": "Seance not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         },
@@ -401,13 +535,15 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "type": "object"
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string"
+                      }
+                    }
                   }
                 }
               }
-            },
-            "400": {
-              "description": "TODO"
             }
           }
         },
@@ -430,13 +566,37 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "type": "object"
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string"
+                      }
+                    }
                   }
                 }
               }
             },
             "400": {
-              "description": "TODO"
+              "description": "Error.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "oneOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -461,13 +621,15 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "type": "object"
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string"
+                      }
+                    }
                   }
                 }
               }
-            },
-            "400": {
-              "description": "TODO"
             }
           }
         },
@@ -490,19 +652,24 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "type": "object"
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string"
+                      }
+                    }
                   }
                 }
               }
             },
-            "400": {
-              "description": "TODO"
+            "405": {
+              "description": "Method not allowed"
             }
           }
         }
       },
       "/sets/{id}": {
-        "get": {
+        "post": {
           "summary": "Return all exercices of a set by id",
           "parameters": [
             {
@@ -521,9 +688,11 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "type": "array",
-                    "items": {
-                      "type": "object"
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string"
+                      }
                     }
                   }
                 }
@@ -534,38 +703,90 @@
       },
       "/users": {
         "get": {
-          "summary": "Get a user by id",
+          "summary": "Get all users or user by id",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "id",
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
           "responses": {
             "200": {
               "description": "Request successful",
               "content": {
                 "application/json": {
                   "schema": {
-                    "type": "object"
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        }
+                      }
+                    }
                   }
                 }
               }
-            },
-            "400": {
-              "description": "TODO"
             }
           }
         },
         "delete": {
           "summary": "Delete a user by id",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "id",
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
           "responses": {
             "200": {
               "description": "Request successful",
               "content": {
                 "application/json": {
                   "schema": {
-                    "type": "object"
+                    "type": "object",
+                    "properties": {
+                      "username": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "integer"
+                      }
+                    }
                   }
                 }
               }
             },
             "400": {
-              "description": "TODO"
+              "description": "Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -590,13 +811,38 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "type": "object"
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "userID": {
+                          "type": "integer"
+                        },
+                        "date": {
+                          "type": "string"
+                        },
+                        "sets": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "reps": {
+                                "type": "integer"
+                              },
+                              "weight": {
+                                "type": "integer"
+                              },
+                              "exerciceID": {
+                                "type": "integer"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
-            },
-            "400": {
-              "description": "TODO"
             }
           }
         }
@@ -610,13 +856,21 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "type": "object"
+                    "type": "object",
+                    "properties": {
+                      "username": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "integer"
+                      }
+                    }
                   }
                 }
               }
-            },
-            "400": {
-              "description": "TODO"
             }
           }
         }
@@ -630,13 +884,21 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "type": "object"
+                    "type": "object",
+                    "properties": {
+                      "username": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "integer"
+                      }
+                    }
                   }
                 }
               }
-            },
-            "400": {
-              "description": "TODO"
             }
           }
         }

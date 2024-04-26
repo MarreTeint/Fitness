@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { Seance } from "@/class/seance";
 import { Set } from "@/class/set";
+
+
 // TODO : correct prisma client number of connections
 export async function addSeance(seance: Seance) {
     const prisma = new PrismaClient();
@@ -29,17 +31,24 @@ export async function addSeance(seance: Seance) {
 
 }
 
-export async function deleteSeance(id: number) {
+//update a seance
+export async function updateSeance(seance: Seance, id: number) {
     const prisma = new PrismaClient();
-    const deleteSeance = await prisma.seance.delete({
+    const updateSeance = await prisma.seance.update({
         where: {
             id: id
+        },
+        data: {
+            userId: seance.userID,
+            date: seance.date
         }
     })
-    console.log("Seance deleted with the id: ", deleteSeance.id)
+    console.log("Seance updated with the id: ", updateSeance.id)
     await prisma.$disconnect();
+    return updateSeance;
 }
 
+//get seance by id
 export async function getSeanceById(id: number) {
     const prisma = new PrismaClient();
     const seance = await prisma.seance.findUnique({
@@ -51,92 +60,51 @@ export async function getSeanceById(id: number) {
     return seance;
 }
 
-export async function getSeanceByUserId(userId: number) {
+//get all seances of a user
+export async function getSeanceByUserId(id: number) {
     const prisma = new PrismaClient();
-    const seance = await prisma.seance.findMany({
+    const seances = await prisma.seance.findMany({
         where: {
-            userId: userId
+            userId: id
         }
     })
     await prisma.$disconnect();
-    
-    return seance;
+    return seances;
 }
 
-export async function updateSeance(seance: Seance,id: number) {
+//delete a seance by id
+export async function deleteSeance(id: number) {
     const prisma = new PrismaClient();
-    const updateSeance = await prisma.seance.update({
+    //test if seance exists
+    const seance = await prisma.seance.findUnique({
         where: {
             id: id
-        },
-        data: {
-            userId: seance.userID,
-            date: seance.date,
         }
     })
-    console.log("Seance updated with the id: ", updateSeance.id)
-    await prisma.$disconnect();
-}
 
-//add a set to a seance
-export async function addSetToSeance(seanceId: number, set: Set) {
-    const prisma = new PrismaClient();
-    const createSet = await prisma.set.create({
-        data: {
-            seanceId: seanceId,
-            exerciseId: set.exerciseID,
-        }
-    })
-    console.log("Set created with the id: ", createSet.id)
-    await prisma.$disconnect();
-    return createSet;
+    if (seance == null) {
+        console.log("Seance not found")
+        await prisma.$disconnect();
+        return;
+    }
 
-}
-
-//delete a set from a seance
-export async function deleteSet(setId: number) {
-    const prisma = new PrismaClient();
-    const deleteSet = await prisma.set.delete({
+    //delete all the sets of the seance
+    const sets = await prisma.set.deleteMany({
         where: {
-            id: setId
+            seanceId: id
         }
     })
-    console.log("Set deleted with the id: ", deleteSet.id)
+    const deleteSeance = await prisma.seance.delete({
+        where: {
+            id: id
+        }
+    })
+    console.log("Seance deleted with the id: ", deleteSeance.id)
     await prisma.$disconnect();
+    return deleteSeance;
 }
 
-//get all sets from a seance
-export async function getSetsFromSeance(seanceId: number) {
-    const prisma = new PrismaClient();
-    const sets = await prisma.set.findMany({
-        where: {
-            seanceId: seanceId
-        }
-    })
-    await prisma.$disconnect();
-    return sets;
-}
 
-//add reps to a set in a seance
-export async function addRepsToSet(setId: number, reps: number, weight: number) {
-    const prisma = new PrismaClient();
-    const updateSet = await prisma.set.update({
-        where: {
-            id: setId
-        },
-        data: {
-            reps: {
-                create: [
-                    {
-                        reps: reps,
-                        weight: weight
-                    }
-                ]
-            },
-        }
-    })
-    console.log("Set updated with the id: ", updateSet.id)
-    await prisma.$disconnect();
-}
+
 
 

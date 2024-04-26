@@ -15,7 +15,7 @@ model MuscularGroup {
   name       String
   bodyPartId Int
   bodyPart   BodyPart   @relation(fields: [bodyPartId], references: [id])
-   firstExercises    Exercice[]           @relation("FirstMuscularGroup")
+  firstExercises    Exercice[]           @relation("FirstMuscularGroup")
   secondExercises   Exercice[]           @relation("SecondMuscularGroup")
   thirdExercises    Exercice[]           @relation("ThirdMuscularGroup")
 }
@@ -28,19 +28,13 @@ model BodyPart {
 
 }
 
-model Rep{
-  id Int @id @default(autoincrement())
-  reps       Int
-  weight     Float
-  setId      Int
-  set        Set @relation(fields: [setId], references: [id])
-
-}
 
 model Set {
   id         Int   @id @default(autoincrement())
-  reps       Rep[]
+  reps       String
+  weight     String
   exerciseId Int
+  exercise   Exercice @relation(fields: [exerciseId], references: [id])
   seanceId   Int  
   seance     Seance @relation(fields: [seanceId], references: [id])
 }
@@ -57,6 +51,7 @@ model Exercice {
   thirdMuscularGroup    MuscularGroup? @relation("ThirdMuscularGroup", fields: [thirdMuscularGroupId], references: [id])
   bodyPartId            Int
   bodyPart              BodyPart @relation(fields: [bodyPartId], references: [id])
+  sets                  Set[]
 }
 
 model Seance {

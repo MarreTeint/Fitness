@@ -1,6 +1,6 @@
 import { Seance } from "@/class/seance";
 import { Set } from "@/class/set";
-import { addSeance, getSeanceByUserId, updateSeance,getSeanceById } from "@/prisma/SeanceManager";
+import { addSeance, getSeanceByUserId, updateSeance,getSeanceById, deleteSeance } from "@/prisma/SeanceManager";
 import { getSetBySeanceId } from "@/prisma/SetManager";
 import { NextRequest,NextResponse } from "next/server";
 
@@ -84,6 +84,18 @@ export async function getSeanceByIdUseCase(request: NextRequest, {params}: {para
         }
         const seance = new Seance(seanceData.userId, seanceData.date, sets);
         return NextResponse.json(seance, {status: 200});
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json({error}, {status: 400});
+    }
+}
+
+//delete a seance
+export async function deleteSeanceUseCase(request: NextRequest, {params}: {params: {id: string}}): Promise<NextResponse> {
+    const id = Number(params.id);
+    try {
+        await deleteSeance(id);
+        return NextResponse.json({status: "Seance deleted"}, {status: 200});
     } catch (error) {
         console.log(error);
         return NextResponse.json({error}, {status: 400});

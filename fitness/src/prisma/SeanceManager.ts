@@ -72,6 +72,38 @@ export async function getSeanceByUserId(id: number) {
     return seances;
 }
 
+//delete a seance by id
+export async function deleteSeance(id: number) {
+    const prisma = new PrismaClient();
+    //test if seance exists
+    const seance = await prisma.seance.findUnique({
+        where: {
+            id: id
+        }
+    })
+
+    if (seance == null) {
+        console.log("Seance not found")
+        await prisma.$disconnect();
+        return;
+    }
+
+    //delete all the sets of the seance
+    const sets = await prisma.set.deleteMany({
+        where: {
+            seanceId: id
+        }
+    })
+    const deleteSeance = await prisma.seance.delete({
+        where: {
+            id: id
+        }
+    })
+    console.log("Seance deleted with the id: ", deleteSeance.id)
+    await prisma.$disconnect();
+    return deleteSeance;
+}
+
 
 
 

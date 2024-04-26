@@ -81,6 +81,13 @@ export async function deleteExercice(id: number) {
         throw new ExerciceError('Exercice does not exist');
     }
 
+    //delete the exercice with the id
+
+    await prisma.set.deleteMany({
+        where: {
+            exerciseId: id
+        }
+    })
     const deleteExercice = await prisma.exercice.delete({
         where: {
             id: id

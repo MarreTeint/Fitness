@@ -72,6 +72,25 @@ export async function deleteUser(id: number) : Promise<{username: string, email:
         throw new UserError('User does not exist');
     }
 
+    //get all id of user's seances and usit in deleteSeance
+    const seances = await prisma.seance.findMany({
+        where: {
+            userId: id
+        }
+    })
+
+    for (let i = 0; i < seances.length; i++) {
+        await prisma.seance.delete({
+            where: {
+                id: seances[i].id
+            }
+        })
+    }
+   
+    
+
+
+
     const deletedUser = await prisma.user.delete({
         where: {
             id: id
@@ -102,7 +121,10 @@ export async function getUsers() : Promise<{username: string, email: string, id:
     const prisma = new PrismaClient();
     const users = await prisma.user.findMany();
     prisma.$disconnect();
-    return users;
+    //return all users fields except password
+    return users.map(user => {
+        return {username: user.username, email: user.email, id: user.id};
+    })
 }
 
 export async function updateUser(id: number, email: string, password: string, username: string): Promise<{username: string, email: string, id: number}> {

@@ -15,7 +15,7 @@ export async function logUserUseCase(request: NextRequest): Promise<NextResponse
         if (error instanceof LogUserError) {
             return NextResponse.json({ error: error.message }, {status: 400});            
         }
-        return NextResponse.json({error}, {status: 400});
+        return NextResponse.json({error}, {status: 500});
     }
 }
 
@@ -31,12 +31,12 @@ export async function signinUserUseCase(request: NextRequest): Promise<NextRespo
 
     try {
         const user = await addUser(email, password, username);
-        return NextResponse.json(user, {status: 200});
+        return NextResponse.json(user, {status: 201});
     } catch (error) {
         if (error instanceof addUserError) {
             return NextResponse.json({ error: error.message }, {status: 400});            
         }
-        return NextResponse.json({error}, {status: 400});
+        return NextResponse.json({error}, {status: 500});
     }
 }
 
@@ -53,12 +53,12 @@ export async function updateUserUseCase(request: NextRequest): Promise<NextRespo
 
     try {
         const user = await updateUser(id, email, password, username);
-        return NextResponse.json(user, {status: 200});
+        return NextResponse.json(user, {status: 201});
     } catch (error) {
         if (error instanceof UserError) {
             return NextResponse.json({ error: error.message }, {status: 400});            
         }
-        return NextResponse.json({error}, {status: 400});
+        return NextResponse.json({error}, {status: 500});
     }
 
 }
@@ -96,7 +96,7 @@ export async function getUsersUseCase(request: NextRequest): Promise<NextRespons
             if (error instanceof UserError) {
                 return NextResponse.json({ error: error.message }, {status: 400});            
             }
-            return NextResponse.json({error}, {status: 400});
+            return NextResponse.json({error}, {status: 500});
 
         }
     }else{
@@ -108,7 +108,7 @@ export async function getUsersUseCase(request: NextRequest): Promise<NextRespons
             if (error instanceof UserError) {
                 return NextResponse.json({ error: error.message }, {status: 400});            
             }
-            return NextResponse.json({error}, {status: 400});
+            return NextResponse.json({error}, {status: 500});
         }
     }
 

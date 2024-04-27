@@ -11,12 +11,12 @@ export async function addSeanceUseCase(request: NextRequest): Promise<NextRespon
     console.log(newSeance);
     try {
         const seance = await addSeance(newSeance);
-        return NextResponse.json(seance?.id, {status: 200});
+        return NextResponse.json(seance?.id, {status: 201});
     } catch (error) {
         if (error instanceof SeanceError) {
             return NextResponse.json({ error: error.message }, {status: 400});            
         }
-        return NextResponse.json({error}, {status: 400});
+        return NextResponse.json({error}, {status: 500});
     }  
 }
 
@@ -27,12 +27,12 @@ export async function updateSeanceUseCase(request: NextRequest, {params}: {param
     const newSeance = new Seance(body.userId, new Date(body.date), []);
     try {
         await updateSeance(newSeance, id);
-        return NextResponse.json({status: "Seance updated"}, {status: 200});
+        return NextResponse.json({status: "Seance updated"}, {status: 201});
     } catch (error) {
         if (error instanceof SeanceError) {
             return NextResponse.json({ error: error.message }, {status: 400});            
         }
-        return NextResponse.json({error}, {status: 400});
+        return NextResponse.json({error}, {status: 500});
     }
 }
 
@@ -69,7 +69,7 @@ export async function getSeanceByUserIdUseCase(request: NextRequest, {params}: {
         if (error instanceof SeanceError) {
             return NextResponse.json({ error: error.message }, {status: 400});            
         }
-        return NextResponse.json({error}, {status: 400});
+        return NextResponse.json({error}, {status: 500});
     }
 }
 
@@ -94,7 +94,7 @@ export async function getSeanceByIdUseCase(request: NextRequest, {params}: {para
         if (error instanceof SeanceError) {
             return NextResponse.json({ error: error.message }, {status: 400});            
         }
-        return NextResponse.json({error}, {status: 400});
+        return NextResponse.json({error}, {status: 500});
     }
 }
 
@@ -108,7 +108,7 @@ export async function deleteSeanceUseCase(request: NextRequest, {params}: {param
         if (error instanceof SeanceError) {
             return NextResponse.json({ error: error.message }, {status: 400});            
         }
-        return NextResponse.json({error}, {status: 400});
+        return NextResponse.json({error}, {status: 500});
     }
 }
 

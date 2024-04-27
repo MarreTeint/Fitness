@@ -9,12 +9,12 @@ export async function addExerciceUseCase(request: NextRequest): Promise<NextResp
     const {name, description, firstMuscularGroupId, secondMuscularGroupId, thirdMuscularGroupId, bodyPartId} = data;
     try {
         await addExercice(name, description, firstMuscularGroupId, secondMuscularGroupId, thirdMuscularGroupId, bodyPartId);
-        return NextResponse.json({message: "Exercice added"}, {status: 200});
+        return NextResponse.json({message: "Exercice added"}, {status: 201});
     } catch (error) {
         if (error instanceof ExerciceError) {
             return NextResponse.json({ error: error.message }, {status: 400});            
         }
-        return NextResponse.json({error}, {status: 400});
+        return NextResponse.json({error}, {status: 500});
     }    
 }
 export async function getExerciceUseCase(  request: NextRequest,
@@ -28,7 +28,7 @@ export async function getExerciceUseCase(  request: NextRequest,
         return NextResponse.json(new Exercice(exercice.id,exercice.name,exercice.description,firstMuscularGroup,secondMuscularGroup,thirdMuscularGroup,bodyPart), { status: 200 });
       } catch (error) {
         if (error instanceof ExerciceError) {
-          return NextResponse.json({ error: error.message }, { status: 400 });
+          return NextResponse.json({ error: error.message }, { status: 500 });
         }
         return NextResponse.json({ error }, { status: 400 });
       }
@@ -41,7 +41,7 @@ export async function deleteExerciceUseCase(request: NextRequest, { params }: { 
         if (error instanceof ExerciceError) {
           return NextResponse.json({ error: error.message }, { status: 400 });
         }
-        return NextResponse.json({ error }, { status: 400 });
+        return NextResponse.json({ error }, { status: 500 });
       }
 }
 export async function updateExerciceUseCase(request: NextRequest, { params }: { params: { id: string }}): Promise<NextResponse> {
@@ -61,12 +61,12 @@ try {
         bodyPartId
     );
     console.log("Exercice updated");
-    return NextResponse.json({ message: "Exercice updated" }, { status: 200 });
+    return NextResponse.json({ message: "Exercice updated" }, { status: 201 });
 } catch (error) {
     if (error instanceof ExerciceError) {
         return NextResponse.json({ error: error.message }, { status: 400 });
     }
-    return NextResponse.json({ error }, { status: 400 });
+    return NextResponse.json({ error }, { status: 500 });
 }
 
 }
@@ -103,7 +103,7 @@ export async function getAllExercicesUseCase(request : NextRequest): Promise<Nex
         if (error instanceof ExerciceError) {
             return NextResponse.json({ error: error.message }, { status: 400 });
         }
-        return NextResponse.json({ error }, { status: 400 });
+        return NextResponse.json({ error }, { status: 500 });
     }
 
 

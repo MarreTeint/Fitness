@@ -8,12 +8,12 @@ export async function addSetUseCase(request: NextRequest, {params}: {params: {id
     const newSet = new Set(data.reps, data.weight, data.exerciseID);
     try {
         await addSetToSeance(id, newSet);
-        return NextResponse.json({status: "Set added to seance"}, {status: 200});
+        return NextResponse.json({status: "Set added to seance"}, {status: 201});
     } catch (error) {
         if (error instanceof SetError) {
             return NextResponse.json({ error: error.message }, {status: 400});            
         }
-        return NextResponse.json({error}, {status: 400});
+        return NextResponse.json({error}, {status: 500});
     }
 }
 
@@ -23,12 +23,12 @@ export async function updateSetUseCase(request: NextRequest, {params}: {params: 
     const newSet = new Set(data.reps, data.weight, data.exerciseID);
     try {
         await updateSet(newSet, id);
-        return NextResponse.json({status: "Set updated"}, {status: 200});
+        return NextResponse.json({status: "Set updated"}, {status: 201});
     } catch (error) {
         if (error instanceof SetError) {
             return NextResponse.json({ error: error.message }, {status: 400});            
         }
-        return NextResponse.json({error}, {status: 400});
+        return NextResponse.json({error}, {status: 500});
     }
 
 }
@@ -61,12 +61,12 @@ export async function addRepsToSet(request: NextRequest, {params}: {params: {id:
     //update the set
     try {
         await updateSet(set, id);
-        return NextResponse.json({status: "Reps added to set"}, {status: 200});
+        return NextResponse.json({status: "Reps added to set"}, {status: 201});
     } catch (error) {
         if (error instanceof SetError) {
             return NextResponse.json({ error: error.message }, {status: 400});            
         }
-        return NextResponse.json({error}, {status: 400});
+        return NextResponse.json({error}, {status: 500});
     }
 
 }
@@ -81,7 +81,7 @@ export async function deleteSetUseCase(request: NextRequest, {params}: {params: 
         if (error instanceof SetError) {
             return NextResponse.json({ error: error.message }, {status: 400});
         }
-        return NextResponse.json({error}, {status: 400});
+        return NextResponse.json({error}, {status: 500});
     }
 }
 

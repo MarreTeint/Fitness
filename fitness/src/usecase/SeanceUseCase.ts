@@ -1,6 +1,6 @@
 import { Seance } from "@/class/seance";
 import { Set } from "@/class/set";
-import { addSeance, getSeanceByUserId, updateSeance,getSeanceById, deleteSeance } from "@/prisma/SeanceManager";
+import { addSeance, getSeanceByUserId, updateSeance,getSeanceById, deleteSeance ,SeanceError} from "@/prisma/SeanceManager";
 import { getSetBySeanceId } from "@/prisma/SetManager";
 import { NextRequest,NextResponse } from "next/server";
 
@@ -13,7 +13,9 @@ export async function addSeanceUseCase(request: NextRequest): Promise<NextRespon
         const seance = await addSeance(newSeance);
         return NextResponse.json(seance?.id, {status: 200});
     } catch (error) {
-        console.log(error);
+        if (error instanceof SeanceError) {
+            return NextResponse.json({ error: error.message }, {status: 400});            
+        }
         return NextResponse.json({error}, {status: 400});
     }  
 }
@@ -27,7 +29,9 @@ export async function updateSeanceUseCase(request: NextRequest, {params}: {param
         await updateSeance(newSeance, id);
         return NextResponse.json({status: "Seance updated"}, {status: 200});
     } catch (error) {
-        console.log(error);
+        if (error instanceof SeanceError) {
+            return NextResponse.json({ error: error.message }, {status: 400});            
+        }
         return NextResponse.json({error}, {status: 400});
     }
 }
@@ -62,7 +66,9 @@ export async function getSeanceByUserIdUseCase(request: NextRequest, {params}: {
         return NextResponse.json(seances, {status: 200});
 
     } catch (error) {
-        console.log(error);
+        if (error instanceof SeanceError) {
+            return NextResponse.json({ error: error.message }, {status: 400});            
+        }
         return NextResponse.json({error}, {status: 400});
     }
 }
@@ -85,7 +91,9 @@ export async function getSeanceByIdUseCase(request: NextRequest, {params}: {para
         const seance = new Seance(seanceData.userId, seanceData.date, sets);
         return NextResponse.json(seance, {status: 200});
     } catch (error) {
-        console.log(error);
+        if (error instanceof SeanceError) {
+            return NextResponse.json({ error: error.message }, {status: 400});            
+        }
         return NextResponse.json({error}, {status: 400});
     }
 }
@@ -97,7 +105,9 @@ export async function deleteSeanceUseCase(request: NextRequest, {params}: {param
         await deleteSeance(id);
         return NextResponse.json({status: "Seance deleted"}, {status: 200});
     } catch (error) {
-        console.log(error);
+        if (error instanceof SeanceError) {
+            return NextResponse.json({ error: error.message }, {status: 400});            
+        }
         return NextResponse.json({error}, {status: 400});
     }
 }

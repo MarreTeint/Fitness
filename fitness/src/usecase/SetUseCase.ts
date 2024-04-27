@@ -1,4 +1,4 @@
-import { addSetToSeance, getSetById, updateSet } from "@/prisma/SetManager";
+import { addSetToSeance, deleteSet, getSetById, SetError, updateSet } from "@/prisma/SetManager";
 import { NextRequest,NextResponse } from "next/server";
 import { Set } from "@/class/set";
 
@@ -10,7 +10,9 @@ export async function addSetUseCase(request: NextRequest, {params}: {params: {id
         await addSetToSeance(id, newSet);
         return NextResponse.json({status: "Set added to seance"}, {status: 200});
     } catch (error) {
-        console.log(error);
+        if (error instanceof SetError) {
+            return NextResponse.json({ error: error.message }, {status: 400});            
+        }
         return NextResponse.json({error}, {status: 400});
     }
 }
@@ -23,7 +25,9 @@ export async function updateSetUseCase(request: NextRequest, {params}: {params: 
         await updateSet(newSet, id);
         return NextResponse.json({status: "Set updated"}, {status: 200});
     } catch (error) {
-        console.log(error);
+        if (error instanceof SetError) {
+            return NextResponse.json({ error: error.message }, {status: 400});            
+        }
         return NextResponse.json({error}, {status: 400});
     }
 
@@ -59,10 +63,26 @@ export async function addRepsToSet(request: NextRequest, {params}: {params: {id:
         await updateSet(set, id);
         return NextResponse.json({status: "Reps added to set"}, {status: 200});
     } catch (error) {
-        console.log(error);
+        if (error instanceof SetError) {
+            return NextResponse.json({ error: error.message }, {status: 400});            
+        }
         return NextResponse.json({error}, {status: 400});
     }
 
+}
+
+//delete a set
+export async function deleteSetUseCase(request: NextRequest, {params}: {params: {id: string}}): Promise<NextResponse>{
+    const id = Number(params.id);
+    try {
+        await deleteSet(id);
+        return NextResponse.json({status: "Set deleted"}, {status: 200});
+    } catch (error) {
+        if (error instanceof SetError) {
+            return NextResponse.json({ error: error.message }, {status: 400});
+        }
+        return NextResponse.json({error}, {status: 400});
+    }
 }
 
 

@@ -103,7 +103,7 @@ export async function getUsersUseCase(request: NextRequest): Promise<NextRespons
         try {
             const user = await getUser(id);
             
-            return NextResponse.json(user, {status: 200});
+            return NextResponse.json([user], {status: 200});
         } catch (error) {
             if (error instanceof UserError) {
                 return NextResponse.json({ error: error.message }, {status: 400});            

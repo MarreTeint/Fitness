@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import 'dotenv/config';
+import { deleteSeance } from "./SeanceManager";
 
 export async function logUser(email: string, password: string): Promise<{username: string, email: string, id: number}> {
 
@@ -80,11 +81,7 @@ export async function deleteUser(id: number) : Promise<{username: string, email:
     })
 
     for (let i = 0; i < seances.length; i++) {
-        await prisma.seance.delete({
-            where: {
-                id: seances[i].id
-            }
-        })
+        await deleteSeance(seances[i].id);
     }
    
     

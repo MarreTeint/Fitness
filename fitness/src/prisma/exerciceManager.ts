@@ -50,6 +50,60 @@ export async function addExercice(name: string, description: string, firstMuscul
         throw new ExerciceError('Exercice already exists');
     }
 
+    //test if the muscular groups exist
+    const firstMuscularGroup = await prisma.muscularGroup.findFirst({
+        where: {
+            id: firstMuscularGroupId
+        }
+    })
+
+    if(!firstMuscularGroup){
+        await prisma.$disconnect();
+        throw new ExerciceError('First muscular group does not exist');
+    }
+
+    //test if the second muscular group exists
+    if(secondMuscularGroupId){
+        const secondMuscularGroup = await prisma.muscularGroup.findFirst({
+            where: {
+                id: secondMuscularGroupId
+            }
+        })
+
+        if(!secondMuscularGroup){
+            await prisma.$disconnect();
+            throw new ExerciceError('Second muscular group does not exist');
+        }
+    }
+
+
+    //test if the third muscular group exists
+    if(thirdMuscularGroupId){
+        const thirdMuscularGroup = await prisma.muscularGroup.findFirst({
+            where: {
+                id: thirdMuscularGroupId
+            }
+        })
+
+        if(!thirdMuscularGroup){
+            await prisma.$disconnect();
+            throw new ExerciceError('Third muscular group does not exist');
+        }
+    }
+
+
+    //test if the body part exists
+    const bodyPart = await prisma.bodyPart.findFirst({
+        where: {
+            id: bodyPartId
+        }
+    })
+
+    if(!bodyPart){
+        await prisma.$disconnect();
+        throw new ExerciceError('Body part does not exist');
+    }
+
 
     const createExercice = await prisma.exercice.create({
         data: {
@@ -81,8 +135,6 @@ export async function deleteExercice(id: number) {
         throw new ExerciceError('Exercice does not exist');
     }
 
-    //delete the exercice with the id
-
     await prisma.set.deleteMany({
         where: {
             exerciseId: id
@@ -111,6 +163,64 @@ export async function updateExercice(id: number, name: string, description: stri
         await prisma.$disconnect();
         throw new ExerciceError('Exercice does not exist');
     }
+
+    //test if the muscular groups exist
+    const firstMuscularGroup = await prisma.muscularGroup.findFirst({
+        where: {
+            id: firstMuscularGroupId
+        }
+    })
+
+    if(!firstMuscularGroup){
+        await prisma.$disconnect();
+        throw new ExerciceError('First muscular group does not exist');
+    }
+  
+
+
+    //test if the second muscular group exists
+    if(secondMuscularGroupId){
+        const secondMuscularGroup = await prisma.muscularGroup.findFirst({
+            where: {
+                id: secondMuscularGroupId
+            }
+        })
+
+        if(!secondMuscularGroup){
+            await prisma.$disconnect();
+            throw new ExerciceError('Second muscular group does not exist');
+        }
+    }
+
+    //test if the third muscular group exists
+    if(thirdMuscularGroupId){
+        const thirdMuscularGroup = await prisma.muscularGroup.findFirst({
+            where: {
+                id: thirdMuscularGroupId
+            }
+        })
+
+        if(!thirdMuscularGroup){
+            await prisma.$disconnect();
+            throw new ExerciceError('Third muscular group does not exist');
+        }
+    }
+
+
+    //test if the body part exists
+    const bodyPart = await prisma.bodyPart.findFirst({
+        where: {
+            id: bodyPartId
+        }
+    })
+
+    if(!bodyPart){
+        await prisma.$disconnect();
+        throw new ExerciceError('Body part does not exist');
+    }
+
+
+
     const updateExercice = await prisma.exercice.update({
         where: {
             id: id
@@ -124,6 +234,7 @@ export async function updateExercice(id: number, name: string, description: stri
             bodyPartId: bodyPartId,
         }
     })
+
     console.log("Exercice updated with the id: ", updateExercice.id)
     await prisma.$disconnect();
 }
@@ -159,6 +270,7 @@ export class ExerciceError extends Error {
         this.name = "ExerciceError";
     }
 }
+
 
 
 

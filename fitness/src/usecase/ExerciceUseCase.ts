@@ -1,7 +1,7 @@
 import { BodyPart } from "@/class/bodyPart";
 import { Exercice } from "@/class/exercice";
 import { muscularGroups } from "@/class/muscularGroup";
-import { addExercice, deleteExercice, getExercice, getExercices, updateExercice } from "@/prisma/exerciceManager";
+import { addExercice, deleteExercice, ExerciceError, getExercice, getExercices, updateExercice } from "@/prisma/exerciceManager";
 import { NextRequest,NextResponse } from "next/server";
 
 export async function addExerciceUseCase(request: NextRequest): Promise<NextResponse> {
@@ -11,6 +11,9 @@ export async function addExerciceUseCase(request: NextRequest): Promise<NextResp
         await addExercice(name, description, firstMuscularGroupId, secondMuscularGroupId, thirdMuscularGroupId, bodyPartId);
         return NextResponse.json({message: "Exercice added"}, {status: 200});
     } catch (error) {
+        if (error instanceof ExerciceError) {
+            return NextResponse.json({ error: error.message }, {status: 400});            
+        }
         return NextResponse.json({error}, {status: 400});
     }    
 }
@@ -24,6 +27,9 @@ export async function getExerciceUseCase(  request: NextRequest,
         const bodyPart: BodyPart = BodyPart[exercice.bodyPartId] as unknown as BodyPart;
         return NextResponse.json(new Exercice(exercice.id,exercice.name,exercice.description,firstMuscularGroup,secondMuscularGroup,thirdMuscularGroup,bodyPart), { status: 200 });
       } catch (error) {
+        if (error instanceof ExerciceError) {
+          return NextResponse.json({ error: error.message }, { status: 400 });
+        }
         return NextResponse.json({ error }, { status: 400 });
       }
 }
@@ -32,6 +38,9 @@ export async function deleteExerciceUseCase(request: NextRequest, { params }: { 
         await deleteExercice(parseInt(params.id));
         return NextResponse.json({ message: "Exercice deleted" }, { status: 200 });
       } catch (error) {
+        if (error instanceof ExerciceError) {
+          return NextResponse.json({ error: error.message }, { status: 400 });
+        }
         return NextResponse.json({ error }, { status: 400 });
       }
 }
@@ -54,19 +63,50 @@ try {
     console.log("Exercice updated");
     return NextResponse.json({ message: "Exercice updated" }, { status: 200 });
 } catch (error) {
+    if (error instanceof ExerciceError) {
+        return NextResponse.json({ error: error.message }, { status: 400 });
+    }
     return NextResponse.json({ error }, { status: 400 });
 }
 
 }
 
-export async function getAllExercicesUseCase(): Promise<NextResponse> {
-    const exercicesData = await getExercices();
-    const exercices = exercicesData.map(exerciceData => {
-        let firstMuscularGroup = muscularGroups[exerciceData.firstMuscularGroupId];
-        let secondMuscularGroup = exerciceData.secondMuscularGroupId !== null ? muscularGroups[exerciceData.secondMuscularGroupId] : undefined;
-        let thirdMuscularGroup = exerciceData.thirdMuscularGroupId !== null ? muscularGroups[exerciceData.thirdMuscularGroupId] : undefined;
-        const bodyPart: BodyPart = BodyPart[exerciceData.bodyPartId] as unknown as BodyPart;
-        return new Exercice(exerciceData.id, exerciceData.name, exerciceData.description, firstMuscularGroup, secondMuscularGroup, thirdMuscularGroup, bodyPart);
-    });
-    return NextResponse.json(exercices, { status: 200 });
+export async function getAllExercicesUseCase(request : NextRequest): Promise<NextResponse> {
+    //get the page of the query url if it exists
+    const url = new URL(request.url, 'http://localhost');
+    const page = Number(url.searchParams.get('page'));
+    let limit = Number(url.searchParams.get('limit'));
+    try {    
+        let  exercicesData = await getExercices();
+
+        //if page and limit are defined, we return the exercices of the page
+        if (page && limit) {
+            exercicesData = exercicesData.slice((page - 1) * limit, page * limit);
+        }else if(page && !limit){
+            limit = 10;
+            exercicesData = exercicesData.slice((page - 1) * limit, page * limit);
+        }else if(!page && limit){
+            throw new ExerciceError("Limit cannot be defined without a page");
+        }else{
+            limit = 10;
+            exercicesData = exercicesData.slice(0, limit);
+        }
+        const exercices = exercicesData.map(exerciceData => {
+            let firstMuscularGroup = muscularGroups[exerciceData.firstMuscularGroupId];
+            let secondMuscularGroup = exerciceData.secondMuscularGroupId !== null ? muscularGroups[exerciceData.secondMuscularGroupId] : undefined;
+            let thirdMuscularGroup = exerciceData.thirdMuscularGroupId !== null ? muscularGroups[exerciceData.thirdMuscularGroupId] : undefined;
+            const bodyPart: BodyPart = BodyPart[exerciceData.bodyPartId] as unknown as BodyPart;
+            return new Exercice(exerciceData.id, exerciceData.name, exerciceData.description, firstMuscularGroup, secondMuscularGroup, thirdMuscularGroup, bodyPart);
+        });
+        return NextResponse.json(exercices, { status: 200 });
+    }catch (error) {
+        if (error instanceof ExerciceError) {
+            return NextResponse.json({ error: error.message }, { status: 400 });
+        }
+        return NextResponse.json({ error }, { status: 400 });
+    }
+
+
 }
+
+

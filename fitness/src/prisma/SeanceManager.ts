@@ -1,9 +1,11 @@
-import { PrismaClient } from "@prisma/client";
+import {prisma} from './prismaClientSingleton';
 import { Seance } from "@/class/seance";
 import { Set } from "@/class/set";
-// TODO : correct prisma client number of connections
+
+
+
 export async function addSeance(seance: Seance) {
-    const prisma = new PrismaClient();
+    
     //test if user exists
     const user = await prisma.user.findUnique({
         where: {
@@ -13,8 +15,8 @@ export async function addSeance(seance: Seance) {
 
     if (user == null) {
         console.log("User not found")
-        await prisma.$disconnect();
-        return;
+       
+        throw new SeanceError('User not found');
     }
 
     const createSeance = await prisma.seance.create({
@@ -24,119 +26,141 @@ export async function addSeance(seance: Seance) {
         }
     })
     console.log("Seance created with the id: ", createSeance.id)
-    await prisma.$disconnect();
+   
     return createSeance;
 
 }
 
-export async function deleteSeance(id: number) {
-    const prisma = new PrismaClient();
-    const deleteSeance = await prisma.seance.delete({
-        where: {
-            id: id
-        }
-    })
-    console.log("Seance deleted with the id: ", deleteSeance.id)
-    await prisma.$disconnect();
-}
-
-export async function getSeanceById(id: number) {
-    const prisma = new PrismaClient();
-    const seance = await prisma.seance.findUnique({
-        where: {
-            id: id
-        }
-    })
-    await prisma.$disconnect();
-    return seance;
-}
-
-export async function getSeanceByUserId(userId: number) {
-    const prisma = new PrismaClient();
-    const seance = await prisma.seance.findMany({
-        where: {
-            userId: userId
-        }
-    })
-    await prisma.$disconnect();
+//update a seance
+export async function updateSeance(seance: Seance, id: number) {
     
-    return seance;
-}
 
-export async function updateSeance(seance: Seance,id: number) {
-    const prisma = new PrismaClient();
+    //test if user exists
+    const user = await prisma.user.findUnique({
+        where: {
+            id: seance.userID
+        }
+    })
+
+    if (user == null) {
+        console.log("User not found")
+       
+        throw  new SeanceError('User not found');
+    }
+
+
+    //test if seance exists
+    const seanceTest = await prisma.seance.findUnique({
+        where: {
+            id: id
+        }
+    })
+
+    if (seanceTest == null) {
+        console.log("Seance not found")
+       
+        throw new SeanceError('Seance not found');
+    }
+
     const updateSeance = await prisma.seance.update({
         where: {
             id: id
         },
         data: {
             userId: seance.userID,
-            date: seance.date,
+            date: seance.date
         }
     })
     console.log("Seance updated with the id: ", updateSeance.id)
-    await prisma.$disconnect();
+   
+    return updateSeance;
 }
 
-//add a set to a seance
-export async function addSetToSeance(seanceId: number, set: Set) {
-    const prisma = new PrismaClient();
-    const createSet = await prisma.set.create({
-        data: {
-            seanceId: seanceId,
-            exerciseId: set.exerciseID,
-        }
-    })
-    console.log("Set created with the id: ", createSet.id)
-    await prisma.$disconnect();
-    return createSet;
-
-}
-
-//delete a set from a seance
-export async function deleteSet(setId: number) {
-    const prisma = new PrismaClient();
-    const deleteSet = await prisma.set.delete({
+//get seance by id
+export async function getSeanceById(id: number) {
+    
+    const seance = await prisma.seance.findUnique({
         where: {
-            id: setId
+            id: id
         }
     })
-    console.log("Set deleted with the id: ", deleteSet.id)
-    await prisma.$disconnect();
+   
+
+    if (seance == null) {
+        console.log("Seance not found")
+        throw new SeanceError('Seance not found');
+    }
+
+    return seance;
 }
 
-//get all sets from a seance
-export async function getSetsFromSeance(seanceId: number) {
-    const prisma = new PrismaClient();
-    const sets = await prisma.set.findMany({
+//get all seances of a user
+export async function getSeanceByUserId(id: number) {
+    
+    //test if user exists
+    const user = await prisma.user.findUnique({
         where: {
-            seanceId: seanceId
+            id: id
         }
     })
-    await prisma.$disconnect();
-    return sets;
+
+    if (user == null) {
+        console.log("User not found")
+       
+        throw new SeanceError('User not found');
+    }
+
+
+    const seances = await prisma.seance.findMany({
+        where: {
+            userId: id
+        }
+    })
+   
+    return seances;
 }
 
-//add reps to a set in a seance
-export async function addRepsToSet(setId: number, reps: number, weight: number) {
-    const prisma = new PrismaClient();
-    const updateSet = await prisma.set.update({
+//delete a seance by id
+export async function deleteSeance(id: number) {
+    
+    //test if seance exists
+    const seance = await prisma.seance.findUnique({
         where: {
-            id: setId
-        },
-        data: {
-            reps: {
-                create: [
-                    {
-                        reps: reps,
-                        weight: weight
-                    }
-                ]
-            },
+            id: id
         }
     })
-    console.log("Set updated with the id: ", updateSet.id)
-    await prisma.$disconnect();
+
+    if (seance == null) {
+        console.log("Seance not found")
+       
+        throw new SeanceError('Seance not found');
+    }
+
+    //delete all the sets of the seance
+    const sets = await prisma.set.deleteMany({
+        where: {
+            seanceId: id
+        }
+    })
+    const deleteSeance = await prisma.seance.delete({
+        where: {
+            id: id
+        }
+    })
+    console.log("Seance deleted with the id: ", deleteSeance.id)
+   
+    return deleteSeance;
 }
+
+
+//create Error class for seance
+export class SeanceError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'SeanceError';
+    }
+}
+
+
 
 

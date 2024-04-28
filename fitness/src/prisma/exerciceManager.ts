@@ -1,10 +1,9 @@
-import { PrismaClient } from "@prisma/client";
+import {prisma} from './prismaClientSingleton';
 import { BaseExercices } from "@/class/exercice";
 import 'dotenv/config';
 
 
 export  async function seedExercice() {
-    const prisma = new PrismaClient();
     // EXERCICES
 
     // First, we drop the exercices
@@ -31,12 +30,12 @@ export  async function seedExercice() {
 
     
     
-    await prisma.$disconnect();
+    
 }
 
 //add an exercice to the list
 export async function addExercice(name: string, description: string, firstMuscularGroupId: number, secondMuscularGroupId: number|undefined, thirdMuscularGroupId: number|undefined, bodyPartId: number) {
-    const prisma = new PrismaClient();
+    
 
     //test if the exercice already exists
     const exerciceTest = await prisma.exercice.findFirst({
@@ -46,7 +45,7 @@ export async function addExercice(name: string, description: string, firstMuscul
     })
 
     if(exerciceTest){
-        await prisma.$disconnect();
+        
         throw new ExerciceError('Exercice already exists');
     }
 
@@ -58,7 +57,7 @@ export async function addExercice(name: string, description: string, firstMuscul
     })
 
     if(!firstMuscularGroup){
-        await prisma.$disconnect();
+        
         throw new ExerciceError('First muscular group does not exist');
     }
 
@@ -71,7 +70,7 @@ export async function addExercice(name: string, description: string, firstMuscul
         })
 
         if(!secondMuscularGroup){
-            await prisma.$disconnect();
+            
             throw new ExerciceError('Second muscular group does not exist');
         }
     }
@@ -86,7 +85,7 @@ export async function addExercice(name: string, description: string, firstMuscul
         })
 
         if(!thirdMuscularGroup){
-            await prisma.$disconnect();
+            
             throw new ExerciceError('Third muscular group does not exist');
         }
     }
@@ -100,7 +99,7 @@ export async function addExercice(name: string, description: string, firstMuscul
     })
 
     if(!bodyPart){
-        await prisma.$disconnect();
+        
         throw new ExerciceError('Body part does not exist');
     }
 
@@ -116,12 +115,12 @@ export async function addExercice(name: string, description: string, firstMuscul
         }
     })
     console.log("Exercice created with the id: ", createExercice.id)
-    await prisma.$disconnect();
+    
 }
 
 //delete an exercice from the list
 export async function deleteExercice(id: number) {
-    const prisma = new PrismaClient();
+    
 
     //test if the exercice exists
     const exerciceTest = await prisma.exercice.findFirst({
@@ -131,7 +130,7 @@ export async function deleteExercice(id: number) {
     })
 
     if(!exerciceTest){
-        await prisma.$disconnect();
+        
         throw new ExerciceError('Exercice does not exist');
     }
 
@@ -146,11 +145,11 @@ export async function deleteExercice(id: number) {
         }
     })
     console.log("Exercice deleted with the id: ", deleteExercice.id)
-    await prisma.$disconnect();
+    
 }
 
 export async function updateExercice(id: number, name: string, description: string, firstMuscularGroupId: number, secondMuscularGroupId: number|undefined, thirdMuscularGroupId: number|undefined, bodyPartId: number) {
-    const prisma = new PrismaClient();
+    
 
     //test if the exercice exists
     const exerciceTest = await prisma.exercice.findFirst({
@@ -160,7 +159,7 @@ export async function updateExercice(id: number, name: string, description: stri
     })
 
     if(!exerciceTest){
-        await prisma.$disconnect();
+        
         throw new ExerciceError('Exercice does not exist');
     }
 
@@ -172,7 +171,7 @@ export async function updateExercice(id: number, name: string, description: stri
     })
 
     if(!firstMuscularGroup){
-        await prisma.$disconnect();
+        
         throw new ExerciceError('First muscular group does not exist');
     }
   
@@ -187,7 +186,7 @@ export async function updateExercice(id: number, name: string, description: stri
         })
 
         if(!secondMuscularGroup){
-            await prisma.$disconnect();
+            
             throw new ExerciceError('Second muscular group does not exist');
         }
     }
@@ -201,7 +200,7 @@ export async function updateExercice(id: number, name: string, description: stri
         })
 
         if(!thirdMuscularGroup){
-            await prisma.$disconnect();
+            
             throw new ExerciceError('Third muscular group does not exist');
         }
     }
@@ -215,7 +214,7 @@ export async function updateExercice(id: number, name: string, description: stri
     })
 
     if(!bodyPart){
-        await prisma.$disconnect();
+        
         throw new ExerciceError('Body part does not exist');
     }
 
@@ -236,25 +235,25 @@ export async function updateExercice(id: number, name: string, description: stri
     })
 
     console.log("Exercice updated with the id: ", updateExercice.id)
-    await prisma.$disconnect();
+    
 }
 
 export async function getExercices() {
-    const prisma = new PrismaClient();
+    
     const exercices = await prisma.exercice.findMany();
-    await prisma.$disconnect();
+    
     return exercices;
 }
 
 //get an exercice by id
 export async function getExercice(id: number) {
-    const prisma = new PrismaClient();
+    
     const exercice = await prisma.exercice.findFirst({
         where: {
             id: id
         }
     })
-    await prisma.$disconnect();
+    
 
     if(!exercice){
         throw new ExerciceError('Exercice does not exist');

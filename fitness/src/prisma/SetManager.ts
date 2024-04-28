@@ -1,10 +1,10 @@
-import { PrismaClient } from "@prisma/client";
+import {prisma} from './prismaClientSingleton';
 import { Seance } from "@/class/seance";
 import { Set } from "@/class/set";
 
 //add Set to a Seance
 export async function addSetToSeance(seanceId: number, set: Set) {
-    const prisma = new PrismaClient();
+
     //test if seance exists
     const seance = await prisma.seance.findUnique({
         where: {
@@ -13,7 +13,7 @@ export async function addSetToSeance(seanceId: number, set: Set) {
     })
     if (seance == null) {
         console.log("Seance not found")
-        await prisma.$disconnect();
+        
         throw new SetError('Seance not found');
     }
 
@@ -26,13 +26,13 @@ export async function addSetToSeance(seanceId: number, set: Set) {
         }
     })
     console.log("Set created with the id: ", createSet.id)
-    await prisma.$disconnect();
+    
     return createSet;
 }
 
 //update a set
 export async function updateSet(set: Set, id: number) {
-    const prisma = new PrismaClient();
+
     //test if set exists
     const setTest = await prisma.set.findUnique({
         where: {
@@ -42,7 +42,7 @@ export async function updateSet(set: Set, id: number) {
 
     if (setTest == null) {
         console.log("Set not found")
-        await prisma.$disconnect();
+        
         throw new SetError('Set not found');
     }
 
@@ -58,13 +58,13 @@ export async function updateSet(set: Set, id: number) {
         }
     })
     console.log("Set updated with the id: ", updateSet.id)
-    await prisma.$disconnect();
+    
     return updateSet;
 }
 
 //get all sets of a seance
 export async function getSetBySeanceId(id: number) {
-    const prisma = new PrismaClient();
+
     //test if seance exists
     const seance = await prisma.seance.findUnique({
         where: {
@@ -74,7 +74,7 @@ export async function getSetBySeanceId(id: number) {
 
     if (seance == null) {
         console.log("Seance not found")
-        await prisma.$disconnect();
+        
         throw new SetError('Seance not found');
     }
     const sets = await prisma.set.findMany({
@@ -82,26 +82,26 @@ export async function getSetBySeanceId(id: number) {
             seanceId: id
         }
     })
-    await prisma.$disconnect();
+    
     return sets;
 }
 
 //get set by id
 export async function getSetById(id: number) {
-    const prisma = new PrismaClient();
+
     //test if set exists
     const set = await prisma.set.findUnique({
         where: {
             id: id
         }
     })
-    await prisma.$disconnect();
+    
     return set;
 }
 
 //delete a set by id
 export async function deleteSet(id: number) {
-    const prisma = new PrismaClient();
+
     //test if set exists
     const set = await prisma.set.findUnique({
         where: {
@@ -111,7 +111,7 @@ export async function deleteSet(id: number) {
 
     if (set == null) {
         console.log("Set not found")
-        await prisma.$disconnect();
+        
         throw new SetError('Set not found');
     }
 
@@ -120,7 +120,7 @@ export async function deleteSet(id: number) {
             id: id
         }
     })
-    await prisma.$disconnect();
+    
     return deletedSet;
 }
 

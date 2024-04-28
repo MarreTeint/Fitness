@@ -1,16 +1,16 @@
-import { PrismaClient } from "@prisma/client";
+import {prisma} from './prismaClientSingleton';
 import 'dotenv/config';
 import { deleteSeance } from "./SeanceManager";
 
 export async function logUser(email: string, password: string): Promise<{username: string, email: string, id: number}> {
 
-    const prisma = new PrismaClient();
+    
     const user = await prisma.user.findFirst({
         where: {
             email: email
         }
     })
-    prisma.$disconnect();
+    
 
     if(!user){
         throw new LogUserError('User unknow');
@@ -25,7 +25,7 @@ export async function logUser(email: string, password: string): Promise<{usernam
 }
 
 export async function addUser(email: string, password: string, username: string): Promise<{username: string, email: string, id: number}> {
-    const prisma = new PrismaClient();
+    
     const userTest = await prisma.user.findFirst({
         where: {
             email: email
@@ -33,7 +33,7 @@ export async function addUser(email: string, password: string, username: string)
     })
 
     if(userTest){
-        prisma.$disconnect();
+        
         throw new addUserError('User already exists');
     }
 
@@ -44,7 +44,7 @@ export async function addUser(email: string, password: string, username: string)
     })
 
     if(usernameTest){
-        prisma.$disconnect();
+        
         throw new addUserError('Username already exists');
        
     }
@@ -56,12 +56,12 @@ export async function addUser(email: string, password: string, username: string)
             username
         }
     })
-    prisma.$disconnect();
+    
     return {username: user.username, email: user.email, id: user.id};
 }
 
 export async function deleteUser(id: number) : Promise<{username: string, email: string, id: number}> {
-    const prisma = new PrismaClient();
+    
     const user = await prisma.user.findFirst({
         where: {
             id: id
@@ -69,7 +69,7 @@ export async function deleteUser(id: number) : Promise<{username: string, email:
     })
 
     if(!user){
-        prisma.$disconnect();
+        
         throw new UserError('User does not exist');
     }
 
@@ -93,18 +93,18 @@ export async function deleteUser(id: number) : Promise<{username: string, email:
             id: id
         }
     })
-    prisma.$disconnect();
+    
     return {username: deletedUser.username, email: deletedUser.email, id: deletedUser.id};
 }
 
 export async function getUser(id: number) : Promise<{username: string, email: string, id: number}> {
-    const prisma = new PrismaClient();
+    
     const user = await prisma.user.findFirst({
         where: {
             id: id
         }
     })
-    prisma.$disconnect();
+    
 
     if(!user){
        
@@ -115,9 +115,9 @@ export async function getUser(id: number) : Promise<{username: string, email: st
 }
 
 export async function getUsers() : Promise<{username: string, email: string, id: number}[]> {
-    const prisma = new PrismaClient();
+    
     const users = await prisma.user.findMany();
-    prisma.$disconnect();
+    
     //return all users fields except password
     return users.map(user => {
         return {username: user.username, email: user.email, id: user.id};
@@ -125,7 +125,7 @@ export async function getUsers() : Promise<{username: string, email: string, id:
 }
 
 export async function updateUser(id: number, email: string, password: string, username: string): Promise<{username: string, email: string, id: number}> {
-    const prisma = new PrismaClient();
+    
     const user = await prisma.user.findFirst({
         where: {
             id: id
@@ -133,7 +133,7 @@ export async function updateUser(id: number, email: string, password: string, us
     })
 
     if(!user){
-        prisma.$disconnect();
+        
         throw new UserError('User does not exist');
     }
 
@@ -147,7 +147,7 @@ export async function updateUser(id: number, email: string, password: string, us
             username
         }
     })
-    prisma.$disconnect();
+    
     return {username: updatedUser.username, email: updatedUser.email, id: updatedUser.id};
 }
 

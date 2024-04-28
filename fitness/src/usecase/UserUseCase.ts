@@ -1,11 +1,24 @@
 import { logUser,addUser,deleteUser,getUser,getUsers,updateUser, LogUserError, UserError, addUserError } from "@/prisma/userManager";
+import { logUserSchema ,signinUserSchema,updateUserSchema} from "@/schema/userSchema";
 import { NextRequest,NextResponse } from "next/server";
 
 export async function logUserUseCase(request: NextRequest): Promise<NextResponse> {
     if (!request.body) {
         return NextResponse.json({ error: 'Request body is empty' },{status: 400});
     }
-    const body = await request.json();
+    let  body 
+    try {
+        body  = await request.json();
+    } catch (error) {
+        return NextResponse.json({ error: 'Invalid format' },{status: 400});
+        
+    }
+    const {error} =logUserSchema.validate(body);
+    if (error) {
+        return NextResponse.json({ error: error.message },{status: 400});
+    }
+
+   
     const { email, password} = body;
 
     try {
@@ -22,7 +35,19 @@ export async function logUserUseCase(request: NextRequest): Promise<NextResponse
 export async function signinUserUseCase(request: NextRequest): Promise<NextResponse> {
 
  
-    const body = await request.json();
+    let  body 
+    try {
+        body = await request.json();
+    } catch (error) {
+        return NextResponse.json({ error: 'Invalid format' },{status: 400});
+        
+    }
+
+    const {error} =signinUserSchema.validate(body);
+    if (error) {
+        return NextResponse.json({ error: error.message },{status: 400});
+    }
+
     const { email, password, username } = body;
 
     if (!email || !password || !username) {
@@ -41,18 +66,29 @@ export async function signinUserUseCase(request: NextRequest): Promise<NextRespo
 }
 
 export async function updateUserUseCase(request: NextRequest): Promise<NextResponse> {
-    const url = new URL(request.url, 'http://localhost'); // Add a base URL for relative URLs
-    const id = Number(url.searchParams.get('id'));
-    const email = url.searchParams.get('email');
-    const password = url.searchParams.get('password');
-    const username = url.searchParams.get('username');
+    let  body
+    try {
+        body = await request.json();
+    } catch (error) {
+        return NextResponse.json({ error: 'Invalid format' },{status: 400});
+        
+    }
+
+    const {error} =updateUserSchema.validate(body);
+    if (error) {
+        return NextResponse.json({ error: error.message },{status: 400});
+    }
+
+    const { id, email, password, username } = body;
+
+
 
     if (!id || !email || !password || !username) {
         return NextResponse.json({ error: 'ID, email, password, and username are required' },{status: 400});
     }
 
     try {
-        const user = await updateUser(id, email, password, username);
+        const user = await updateUser(parseInt(id), email, password, username);
         return NextResponse.json(user, {status: 201});
     } catch (error) {
         if (error instanceof UserError) {

@@ -9,6 +9,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+
 return await getExerciceUseCase(request, { params });
  
 }
@@ -24,6 +25,6 @@ export async function DELETE(
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string }}
-) {
+) {  
   return await updateExerciceUseCase(request, { params })
 }

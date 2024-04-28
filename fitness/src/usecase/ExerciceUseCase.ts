@@ -2,10 +2,28 @@ import { BodyPart } from "@/class/bodyPart";
 import { Exercice } from "@/class/exercice";
 import { muscularGroups } from "@/class/muscularGroup";
 import { addExercice, deleteExercice, ExerciceError, getExercice, getExercices, updateExercice } from "@/prisma/exerciceManager";
+import { addExerciceSchema } from "@/schema/exercieSchema";
 import { NextRequest,NextResponse } from "next/server";
 
+
+
+
 export async function addExerciceUseCase(request: NextRequest): Promise<NextResponse> {
-    const data = await request.json();
+ let data;
+    try{
+         data = await request.json();
+
+    }catch(error){
+        return NextResponse.json({ error: "Invalid format"}, { status: 400 });
+    }
+   
+    console.log(data);
+    const { error } = addExerciceSchema.validate(data);
+if (error) {
+    return NextResponse.json({ error: error.message}, { status: 400 });
+}
+
+  
     const {name, description, firstMuscularGroupId, secondMuscularGroupId, thirdMuscularGroupId, bodyPartId} = data;
     try {
         await addExercice(name, description, firstMuscularGroupId, secondMuscularGroupId, thirdMuscularGroupId, bodyPartId);
@@ -45,7 +63,19 @@ export async function deleteExerciceUseCase(request: NextRequest, { params }: { 
       }
 }
 export async function updateExerciceUseCase(request: NextRequest, { params }: { params: { id: string }}): Promise<NextResponse> {
-    const data = await request.json();
+    let  data ; 
+
+    try {
+        data  = await request.json();
+    } catch (error) {
+        return NextResponse.json({ error: "Invalid format" }, { status: 400 });        
+    }
+    const { error } = addExerciceSchema.validate(data);
+    if (error) {
+        return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+    
+   
     console.log(params);
     console.log(params.id);
     console.log(data);
@@ -70,7 +100,6 @@ try {
 }
 
 }
-
 export async function getAllExercicesUseCase(request : NextRequest): Promise<NextResponse> {
     //get the page of the query url if it exists
     const url = new URL(request.url, 'http://localhost');

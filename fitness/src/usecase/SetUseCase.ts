@@ -1,10 +1,22 @@
 import { addSetToSeance, deleteSet, getSetById, SetError, updateSet } from "@/prisma/SetManager";
 import { NextRequest,NextResponse } from "next/server";
 import { Set } from "@/class/set";
+import { addSetScheam ,updateSetSchema, addRepsToSetSchema} from "@/schema/setSchema";
 
 export async function addSetUseCase(request: NextRequest, {params}: {params: {id: string}}): Promise<NextResponse> {
     const id = Number(params.id);
-    const data = await request.json();
+    let data;
+    try {
+        data = await request.json();
+    } catch (error) {
+        return NextResponse.json({error: "Invalid JSON"}, {status: 400});
+    }
+
+    const {error} = addSetScheam.validate(data);
+    if (error) {
+        return NextResponse.json({error: error.message}, {status: 400});
+    }
+
     const newSet = new Set(data.reps, data.weight, data.exerciseID);
     try {
         await addSetToSeance(id, newSet);
@@ -19,7 +31,19 @@ export async function addSetUseCase(request: NextRequest, {params}: {params: {id
 
 export async function updateSetUseCase(request: NextRequest, {params}: {params: {id: string}}): Promise<NextResponse> {
     const id = Number(params.id);
-    const data = await request.json();
+   let data;
+    try {
+        data = await request.json();
+    } catch (error) {
+        return NextResponse.json({error: "Invalid JSON"}, {status: 400});
+    }
+
+    const {error} = updateSetSchema.validate(data);
+    if (error) {
+        return NextResponse.json({error: error.message}, {status: 400});
+    }
+
+
     const newSet = new Set(data.reps, data.weight, data.exerciseID);
     try {
         await updateSet(newSet, id);
@@ -36,7 +60,19 @@ export async function updateSetUseCase(request: NextRequest, {params}: {params: 
 //add rep a rep to a set
 export async function addRepsToSet(request: NextRequest, {params}: {params: {id: string}}): Promise<NextResponse> {
     //first get the set by id
-    const data = await request.json();
+  let data;
+    try {
+        data = await request.json();
+    } catch (error) {
+        return NextResponse.json({error: "Invalid JSON"}, {status: 400});
+    }
+
+    const {error} = addRepsToSetSchema.validate(data);
+    if (error) {
+        return NextResponse.json({error: error.message}, {status: 400});
+    }
+
+
     const id = Number(params.id);
     const setData = await getSetById(id);
     if (setData == null) {

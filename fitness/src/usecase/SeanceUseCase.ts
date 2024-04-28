@@ -3,9 +3,21 @@ import { Set } from "@/class/set";
 import { addSeance, getSeanceByUserId, updateSeance,getSeanceById, deleteSeance ,SeanceError} from "@/prisma/SeanceManager";
 import { getSetBySeanceId } from "@/prisma/SetManager";
 import { NextRequest,NextResponse } from "next/server";
+import {addSeanceSchema,updateSeanceSchema} from "@/schema/seanceSchema";
 
 export async function addSeanceUseCase(request: NextRequest): Promise<NextResponse> {
-    const body = await request.json();
+    let body;
+    try {
+        body = await request.json();
+        
+    } catch (error) {
+        return NextResponse.json({error: "Invalid JSON"}, {status: 400});
+        
+    }
+    const {error} = addSeanceSchema.validate(body);
+    if (error) {
+        return NextResponse.json({error: error.message}, {status: 400});
+    }
     console.log(body);
     const newSeance = new Seance(body.userId, new Date(body.date), []);
     console.log(newSeance);
@@ -23,7 +35,19 @@ export async function addSeanceUseCase(request: NextRequest): Promise<NextRespon
 //update a seance
 export async function updateSeanceUseCase(request: NextRequest, {params}: {params: {id: string}}): Promise<NextResponse> {
     const id = Number(params.id);
-    const body = await request.json();
+    let body;
+    try {
+        body = await request.json();
+        
+    } catch (error) {
+        return NextResponse.json({error: "Invalid JSON"}, {status: 400});
+        
+    }
+    const {error} = updateSeanceSchema.validate(body);
+    if (error) {
+        return NextResponse.json({error: error.message}, {status: 400});
+    }
+    
     const newSeance = new Seance(body.userId, new Date(body.date), []);
     try {
         await updateSeance(newSeance, id);

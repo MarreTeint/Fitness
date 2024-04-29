@@ -17,4 +17,6 @@ COPY --from=BUILD . .
 WORKDIR /fitness
 RUN pnpm run db-init
 EXPOSE 3000
+ENV DATABASE_URL="file:./dev.db"
+RUN pnpm run db-init
 CMD ["npm", "start"]

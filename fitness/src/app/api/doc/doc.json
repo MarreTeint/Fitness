@@ -476,6 +476,9 @@
                   }
                 }
               }
+            },
+            "500": {
+              "description": "Unhandled error from server"
             }
           }
         }

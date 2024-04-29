@@ -46,7 +46,7 @@
             }
           },
           "responses": {
-            "200": {
+            "201": {
               "description": "Exercice added",
               "content": {
                 "application/json": {
@@ -62,7 +62,7 @@
               }
             },
             "400": {
-              "description": "Bad request",
+              "description": "Bad request informations",
               "content": {
                 "application/json": {
                   "schema": {
@@ -75,6 +75,9 @@
                   }
                 }
               }
+            },
+            "500": {
+              "description": "Unhandled error from server"
             }
           }
         }
@@ -174,6 +177,9 @@
                   }
                 }
               }
+            },
+            "500": {
+              "description": "Unhandled error from server"
             }
           }
         },
@@ -227,7 +233,7 @@
             }
           },
           "responses": {
-            "200": {
+            "201": {
               "description": "Exercice updated",
               "content": {
                 "application/json": {
@@ -243,7 +249,7 @@
               }
             },
             "400": {
-              "description": "Exercice not found",
+              "description": "Bad request information",
               "content": {
                 "application/json": {
                   "schema": {
@@ -256,6 +262,9 @@
                   }
                 }
               }
+            },
+            "500": {
+              "description": "Unhandled error from server"
             }
           }
         },
@@ -307,6 +316,9 @@
                   }
                 }
               }
+            },
+            "500": {
+              "description": "Unhandled error from server"
             }
           }
         }
@@ -314,6 +326,22 @@
       "/exercices": {
         "get": {
           "summary": "Return all exercices",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "page",
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "in": "query",
+              "name": "limit",
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
           "responses": {
             "200": {
               "description": "Request successful",
@@ -380,6 +408,24 @@
                   }
                 }
               }
+            },
+            "400": {
+              "description": "Bad request information",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Unhandled error from server"
             }
           }
         }
@@ -406,7 +452,7 @@
             }
           },
           "responses": {
-            "200": {
+            "201": {
               "description": "Seance created",
               "content": {
                 "application/json": {
@@ -485,7 +531,7 @@
               }
             },
             "400": {
-              "description": "Internal Error",
+              "description": "Bad request information",
               "content": {
                 "application/json": {
                   "schema": {
@@ -499,20 +545,8 @@
                 }
               }
             },
-            "404": {
-              "description": "Seance not found",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "error": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                }
-              }
+            "500": {
+              "description": "Unhandled error from server"
             }
           }
         },
@@ -544,6 +578,24 @@
                   }
                 }
               }
+            },
+            "400": {
+              "description": "Bad request information",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Unhandled error from server"
             }
           }
         },
@@ -560,8 +612,26 @@
               }
             }
           ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "type": "integer"
+                    },
+                    "date": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "responses": {
-            "200": {
+            "201": {
               "description": "Request successful",
               "content": {
                 "application/json": {
@@ -577,26 +647,22 @@
               }
             },
             "400": {
-              "description": "Error.",
+              "description": "Bad request information",
               "content": {
                 "application/json": {
                   "schema": {
                     "type": "object",
                     "properties": {
                       "error": {
-                        "oneOf": [
-                          {
-                            "type": "string"
-                          },
-                          {
-                            "type": "object"
-                          }
-                        ]
+                        "type": "string"
                       }
                     }
                   }
                 }
               }
+            },
+            "500": {
+              "description": "Unhandled error from server"
             }
           }
         }
@@ -615,8 +681,29 @@
               }
             }
           ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "exerciceId": {
+                      "type": "integer"
+                    },
+                    "reps": {
+                      "type": "integer"
+                    },
+                    "weight": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "responses": {
-            "200": {
+            "201": {
               "description": "Request successful",
               "content": {
                 "application/json": {
@@ -630,6 +717,24 @@
                   }
                 }
               }
+            },
+            "400": {
+              "description": "Bad request information",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Unhandled error from server"
             }
           }
         },
@@ -662,15 +767,37 @@
                 }
               }
             },
-            "405": {
-              "description": "Method not allowed"
+            "400": {
+              "description": "Bad request information",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Unhandled error from server",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object"
+                  }
+                }
+              }
             }
           }
         }
       },
       "/sets/{id}": {
         "post": {
-          "summary": "Return all exercices of a set by id",
+          "summary": "Add rep to set by id",
           "parameters": [
             {
               "in": "path",
@@ -682,8 +809,26 @@
               }
             }
           ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "reps": {
+                      "type": "integer"
+                    },
+                    "weight": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "responses": {
-            "200": {
+            "201": {
               "description": "Success",
               "content": {
                 "application/json": {
@@ -697,6 +842,100 @@
                   }
                 }
               }
+            },
+            "400": {
+              "description": "Bad request information",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Unhandled error from server"
+            }
+          }
+        },
+        "put": {
+          "summary": "Update a rep of a set by set id",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "description": "Id of the set",
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "reps": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "weight": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "exerciceId": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Set updated",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request information",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Unhandled error from server"
             }
           }
         }
@@ -737,6 +976,24 @@
                   }
                 }
               }
+            },
+            "400": {
+              "description": "Bad request information",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Unhandled error from server"
             }
           }
         },
@@ -774,7 +1031,7 @@
               }
             },
             "400": {
-              "description": "Error",
+              "description": "Bad request information",
               "content": {
                 "application/json": {
                   "schema": {
@@ -787,6 +1044,86 @@
                   }
                 }
               }
+            },
+            "500": {
+              "description": "Unhandled error from server"
+            }
+          }
+        },
+        "put": {
+          "summary": "Update a user",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "id",
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "User updated",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "username": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request information",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Unhandled error from server"
             }
           }
         }
@@ -843,6 +1180,24 @@
                   }
                 }
               }
+            },
+            "400": {
+              "description": "Bad request information",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Unhandled error from server"
             }
           }
         }
@@ -850,6 +1205,24 @@
       "/users/login": {
         "post": {
           "summary": "Log in an user",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "responses": {
             "200": {
               "description": "Request successful",
@@ -871,6 +1244,24 @@
                   }
                 }
               }
+            },
+            "400": {
+              "description": "Bad request information",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Unhandled error from server"
             }
           }
         }
@@ -878,8 +1269,29 @@
       "/users/signin": {
         "post": {
           "summary": "Sign in a new user",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "responses": {
-            "200": {
+            "201": {
               "description": "Request successful",
               "content": {
                 "application/json": {
@@ -899,6 +1311,24 @@
                   }
                 }
               }
+            },
+            "400": {
+              "description": "Bad request information",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Unhandled error from server"
             }
           }
         }

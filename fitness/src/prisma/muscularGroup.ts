@@ -1,9 +1,9 @@
-import { PrismaClient } from "@prisma/client";
+import {prisma} from './prismaClientSingleton';
 import { muscularGroups } from "@/class/muscularGroup";
 import 'dotenv/config';
 
 export async function seedMuscularGroup() {
-    const prisma = new PrismaClient();
+    
     
     // MUSCULAR GROUPS
 
@@ -23,5 +23,5 @@ export async function seedMuscularGroup() {
         console.log("Muscular groups created with the ids: ", createMuscularGroup.id)
     }
     
-    await prisma.$disconnect();
+    
 }

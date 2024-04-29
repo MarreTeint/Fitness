@@ -1,9 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+import {prisma} from './prismaClientSingleton';
 import { BodyPart } from "@/class/bodyPart";
 import 'dotenv/config';
 
 export async function seedBodyPart() {
-    const prisma = new PrismaClient();
     
     // BODY PARTS
     for (let index = 0; index < Object.keys(BodyPart).length / 2; index++) {
@@ -15,9 +14,5 @@ export async function seedBodyPart() {
         })
         console.log("Body parts created with the ids: ", createBodyPart.id)
     }
-    
 
-    
-
-    await prisma.$disconnect();
 }

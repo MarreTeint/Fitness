@@ -1,34 +1,62 @@
 import { Seance } from "@/class/seance";
 import { Set } from "@/class/set";
-import { addSeance, getSeanceByUserId, updateSeance,getSeanceById, deleteSeance } from "@/prisma/SeanceManager";
+import { addSeance, getSeanceByUserId, updateSeance,getSeanceById, deleteSeance ,SeanceError} from "@/prisma/SeanceManager";
 import { getSetBySeanceId } from "@/prisma/SetManager";
 import { NextRequest,NextResponse } from "next/server";
+import {addSeanceSchema,updateSeanceSchema} from "@/schema/seanceSchema";
 
 export async function addSeanceUseCase(request: NextRequest): Promise<NextResponse> {
-    const body = await request.json();
+    let body;
+    try {
+        body = await request.json();
+        
+    } catch (error) {
+        return NextResponse.json({error: "Invalid JSON"}, {status: 400});
+        
+    }
+    const {error} = addSeanceSchema.validate(body);
+    if (error) {
+        return NextResponse.json({error: error.message}, {status: 400});
+    }
     console.log(body);
     const newSeance = new Seance(body.userId, new Date(body.date), []);
     console.log(newSeance);
     try {
         const seance = await addSeance(newSeance);
-        return NextResponse.json(seance?.id, {status: 200});
+        return NextResponse.json(seance?.id, {status: 201});
     } catch (error) {
-        console.log(error);
-        return NextResponse.json({error}, {status: 400});
+        if (error instanceof SeanceError) {
+            return NextResponse.json({ error: error.message }, {status: 400});            
+        }
+        return NextResponse.json({error}, {status: 500});
     }  
 }
 
 //update a seance
 export async function updateSeanceUseCase(request: NextRequest, {params}: {params: {id: string}}): Promise<NextResponse> {
     const id = Number(params.id);
-    const body = await request.json();
+    let body;
+    try {
+        body = await request.json();
+        
+    } catch (error) {
+        return NextResponse.json({error: "Invalid JSON"}, {status: 400});
+        
+    }
+    const {error} = updateSeanceSchema.validate(body);
+    if (error) {
+        return NextResponse.json({error: error.message}, {status: 400});
+    }
+    
     const newSeance = new Seance(body.userId, new Date(body.date), []);
     try {
         await updateSeance(newSeance, id);
-        return NextResponse.json({status: "Seance updated"}, {status: 200});
+        return NextResponse.json({status: "Seance updated"}, {status: 201});
     } catch (error) {
-        console.log(error);
-        return NextResponse.json({error}, {status: 400});
+        if (error instanceof SeanceError) {
+            return NextResponse.json({ error: error.message }, {status: 400});            
+        }
+        return NextResponse.json({error}, {status: 500});
     }
 }
 
@@ -62,8 +90,10 @@ export async function getSeanceByUserIdUseCase(request: NextRequest, {params}: {
         return NextResponse.json(seances, {status: 200});
 
     } catch (error) {
-        console.log(error);
-        return NextResponse.json({error}, {status: 400});
+        if (error instanceof SeanceError) {
+            return NextResponse.json({ error: error.message }, {status: 400});            
+        }
+        return NextResponse.json({error}, {status: 500});
     }
 }
 
@@ -85,8 +115,10 @@ export async function getSeanceByIdUseCase(request: NextRequest, {params}: {para
         const seance = new Seance(seanceData.userId, seanceData.date, sets);
         return NextResponse.json(seance, {status: 200});
     } catch (error) {
-        console.log(error);
-        return NextResponse.json({error}, {status: 400});
+        if (error instanceof SeanceError) {
+            return NextResponse.json({ error: error.message }, {status: 400});            
+        }
+        return NextResponse.json({error}, {status: 500});
     }
 }
 
@@ -97,8 +129,10 @@ export async function deleteSeanceUseCase(request: NextRequest, {params}: {param
         await deleteSeance(id);
         return NextResponse.json({status: "Seance deleted"}, {status: 200});
     } catch (error) {
-        console.log(error);
-        return NextResponse.json({error}, {status: 400});
+        if (error instanceof SeanceError) {
+            return NextResponse.json({ error: error.message }, {status: 400});            
+        }
+        return NextResponse.json({error}, {status: 500});
     }
 }
 

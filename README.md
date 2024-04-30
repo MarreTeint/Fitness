@@ -1,8 +1,8 @@
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
 ![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)
 ![Sqlite](https://img.shields.io/badge/Sqlite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
 ![Contributors](https://img.shields.io/github/contributors/MarreTeint/Fitness?style=for-the-badge)
 
@@ -12,7 +12,11 @@
 
 A small backend to follow your fitness journey
 
-## Installation process for developement
+## Run in a container
+Run the following command to start the container
+```bash
+docker-compose up
+```
 
 ## Script project
 
@@ -29,5 +33,3 @@ A small backend to follow your fitness journey
 
 ### db-init
     init the database
-
-## Deployement process

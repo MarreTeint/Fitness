@@ -2,7 +2,7 @@ import { BodyPart } from "@/class/bodyPart";
 import { Exercice } from "@/class/exercice";
 import { muscularGroups } from "@/class/muscularGroup";
 import { addExercice, deleteExercice, ExerciceError, getExercice, getExercices, updateExercice } from "@/prisma/exerciceManager";
-import { addExerciceSchema } from "@/schema/exercieSchema";
+import { addExerciceSchema ,ExcerciceOutputSchema,ExercicesOutputSchema} from "@/schema/exercieSchema";
 import { NextRequest,NextResponse } from "next/server";
 
 
@@ -43,7 +43,19 @@ export async function getExerciceUseCase(  request: NextRequest,
         let secondMuscularGroup = exercice.secondMuscularGroupId !== null ? muscularGroups[exercice.secondMuscularGroupId] : undefined;
         let thirdMuscularGroup = exercice.thirdMuscularGroupId !== null ? muscularGroups[exercice.thirdMuscularGroupId] : undefined;
         const bodyPart: BodyPart = BodyPart[exercice.bodyPartId] as unknown as BodyPart;
-        return NextResponse.json(new Exercice(exercice.id,exercice.name,exercice.description,firstMuscularGroup,secondMuscularGroup,thirdMuscularGroup,bodyPart), { status: 200 });
+
+        const exoOut = new Exercice(exercice.id,exercice.name,exercice.description,firstMuscularGroup,secondMuscularGroup,thirdMuscularGroup,bodyPart);
+
+        const { error } = ExcerciceOutputSchema.validate(exoOut);
+
+        if (error) {
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+
+
+        
+
+        return NextResponse.json(exoOut, { status: 200 });
       } catch (error) {
         if (error instanceof ExerciceError) {
           return NextResponse.json({ error: error.message }, { status: 500 });
@@ -127,6 +139,12 @@ export async function getAllExercicesUseCase(request : NextRequest): Promise<Nex
             const bodyPart: BodyPart = BodyPart[exerciceData.bodyPartId] as unknown as BodyPart;
             return new Exercice(exerciceData.id, exerciceData.name, exerciceData.description, firstMuscularGroup, secondMuscularGroup, thirdMuscularGroup, bodyPart);
         });
+
+        const { error } = ExercicesOutputSchema.validate({ exercices });
+
+        if (error) {
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
         return NextResponse.json(exercices, { status: 200 });
     }catch (error) {
         if (error instanceof ExerciceError) {

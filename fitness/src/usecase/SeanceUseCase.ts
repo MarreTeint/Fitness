@@ -3,7 +3,7 @@ import { Set } from "@/class/set";
 import { addSeance, getSeanceByUserId, updateSeance,getSeanceById, deleteSeance ,SeanceError} from "@/prisma/SeanceManager";
 import { getSetBySeanceId } from "@/prisma/SetManager";
 import { NextRequest,NextResponse } from "next/server";
-import {addSeanceSchema,updateSeanceSchema} from "@/schema/seanceSchema";
+import {addSeanceSchema,updateSeanceSchema,SeanceOutputSchema,SeancesOutputSchema} from "@/schema/seanceSchema";
 
 export async function addSeanceUseCase(request: NextRequest): Promise<NextResponse> {
     let body;
@@ -87,6 +87,13 @@ export async function getSeanceByUserIdUseCase(request: NextRequest, {params}: {
             seances.push(seance);
             
         }
+        const {error} = SeancesOutputSchema.validate(seances);
+
+        if (error) {
+            return NextResponse.json({error: error.message}, {status: 400});
+        }
+
+
         return NextResponse.json(seances, {status: 200});
 
     } catch (error) {
@@ -113,6 +120,15 @@ export async function getSeanceByIdUseCase(request: NextRequest, {params}: {para
             sets.push(set);
         }
         const seance = new Seance(seanceData.userId, seanceData.date, sets);
+
+        const {error} = SeanceOutputSchema.validate(seance);
+
+        if (error) {
+            return NextResponse.json({error: error.message}, {status: 400});
+        }
+
+
+
         return NextResponse.json(seance, {status: 200});
     } catch (error) {
         if (error instanceof SeanceError) {

@@ -19,3 +19,12 @@ export const updateUserSchema = joi.object({
     password: joi.string().required(),
     username: joi.string().required()
 });
+
+export const OutUserSchema = joi.object({
+    id: joi.number().required(),
+    email: joi.string().email().required(),
+    username: joi.string().required()
+});
+
+
+export const OutUsersSchema = joi.array().items(OutUserSchema);

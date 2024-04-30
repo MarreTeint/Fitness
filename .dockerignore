@@ -1,10 +1,10 @@
-node_modules
+fitness/node_modules
 npm-debug.log
-build
+**/build
 .git
 *.md
-.gitignore
+fitness/.gitignore
 *.db
 *.db-journal
-/prisma/migrations/
-/prisma/dev.db
+fitness/src/prisma/migrations/*
+fitness/src/prisma/dev.db

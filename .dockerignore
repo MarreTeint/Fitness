@@ -6,5 +6,5 @@ npm-debug.log
 fitness/.gitignore
 *.db
 *.db-journal
-fitness/src/prisma/migrations/*
-fitness/src/prisma/dev.db
+/prisma/migrations/
+/prisma/dev.db

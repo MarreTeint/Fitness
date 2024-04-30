@@ -17,7 +17,9 @@ FROM node:21 AS RUN
 ENV DATABASE_URL="file:./dev.db"
 COPY --from=BUILD . .
 WORKDIR /fitness
-RUN cd src/ && pnpm dlx prisma migrate reset --force 
+#RUN cd src/ && pnpm dlx prisma migrate dev
+#can simulate an enter key press to accept the migration
+RUN cd src/ && pnpm dlx prisma migrate dev -n dev.db
 RUN pnpm run db-seed
 EXPOSE 3000
 CMD ["npm", "start"]

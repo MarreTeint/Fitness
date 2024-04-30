@@ -6,5 +6,5 @@ build
 .gitignore
 *.db
 *.db-journal
-/prisma/migrations/
-/prisma/dev.db
+fitness/src/prisma/migrations/
+fitness/src/prisma/dev.db

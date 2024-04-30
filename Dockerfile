@@ -8,7 +8,7 @@ RUN npm cache clean --force
 #install pnpm
 RUN npm install -g pnpm
 RUN pnpm install --force
-
+RUN cd src/ && pnpm dlx prisma generate
 RUN pnpm run build
 
 

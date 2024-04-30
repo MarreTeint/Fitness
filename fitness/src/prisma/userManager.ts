@@ -119,7 +119,7 @@ export async function getUsers() : Promise<{username: string, email: string, id:
     const users = await prisma.user.findMany();
     
     //return all users fields except password
-    return users.map(user => {
+    return users.map((user:any) => {
         return {username: user.username, email: user.email, id: user.id};
     })
 }
